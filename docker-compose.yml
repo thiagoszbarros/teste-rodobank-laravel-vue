@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+  nginx:
+    container_name: nginx
+    image: nginx:alpine
+    restart: unless-stopped
+    depends_on:
+      - php
+    ports:
+      - "8001:80"
+    working_dir: /var/www/rodobank-api
+    volumes:
+      - ./:/var/www/rodobank-api
+      - ./docker/nginx/:/etc/nginx/conf.d/
+  php:
+    container_name: php
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+      - "8000:8000"
+    working_dir: /var/www/rodobank-api
+    volumes:
+      - .:/var/www/rodobank-api
+      - /var/www/rodobank-api/vendor
+  postgres:
+    container_name: postgres
+    build:
+      context: ./docker/postgres
+      dockerfile: Dockerfile
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: .N*yMDP!IP[)<Dp&
+    ports:
+      - "5433:5432"
+    volumes:
+      - ./docker/postgres/database:/var/lib/postgresql/data
+  pgadmin:
+    container_name: pgadmin
+    image: dpage/pgadmin4
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: N%CD<B:X8O?H60R6
+    ports:
+      - "5050:80"
