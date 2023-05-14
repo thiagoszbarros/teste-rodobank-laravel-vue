@@ -30,18 +30,14 @@ class CaminhaoFactory extends Factory
 
     private static function placa(): string
     {
-        $placa = '';
-
-        for ($i = 0; $i < 3; $i++) {
-            $placa .= chr(rand(65, 90));
-        }
-        $placa .= '-';
-        $placa .= strval(rand(0, 9));
-        $placa .= chr(rand(65, 90));
-        for ($i = 0; $i < 2; $i++) {
-            $placa .= strval(rand(0, 9));
-        }
-
-        return $placa;
+        return
+            chr(rand(65, 90)) .
+            chr(rand(65, 90)) .
+            chr(rand(65, 90)) .
+            '-' .
+            strval(rand(0, 9)) .
+            chr(rand(65, 90)) .
+            strval(rand(0, 9)) .
+            strval(rand(0, 9));
     }
 }

@@ -2,13 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\AtualizarModeloRequest;
-use App\Http\Requests\CriarModeloRequest;
+use App\Http\Requests\AtualizarCaminhaoRequest;
+use App\Http\Requests\CriarCaminhaoRequest;
 use App\Interfaces\CRUD;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
-class ModeloController extends Controller
+class CaminhaoController extends Controller
 {
     public function __construct(
         private CRUD $modelo
@@ -48,13 +47,13 @@ class ModeloController extends Controller
         }
     }
 
-    public function store(CriarModeloRequest $request)
+    public function store(CriarCaminhaoRequest $request)
     {
         try {
             $this->modelo->criar($request->all());
 
             return new Response([
-                'data' => 'Modelo criado com sucesso.',
+                'data' => 'modelo criado com sucesso.',
             ], Response::HTTP_CREATED);
         } catch (\Exception $e) {
 
@@ -67,7 +66,7 @@ class ModeloController extends Controller
         }
     }
 
-    public function update(AtualizarModeloRequest $request, int $id)
+    public function update(AtualizarCaminhaoRequest $request, int $id)
     {
         try {
             $this->modelo->atualizar($id, $request->all());
@@ -84,7 +83,7 @@ class ModeloController extends Controller
         }
     }
 
-    public function destroy(int $id)
+    public function destroy($id)
     {
         try {
             $this->modelo->deletar($id);

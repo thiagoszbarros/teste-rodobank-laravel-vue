@@ -19,7 +19,7 @@ class ModeloService implements CRUD
             ->get();
     }
 
-    public function obterPor(int $id): ?Modelo
+    public function obterPor(string $id): ?Modelo
     {
         return $this->modelo::select('id', 'nome')
             ->find($id);
@@ -34,15 +34,15 @@ class ModeloService implements CRUD
         );
     }
 
-    public function atualizar(int $id, array $request): void
+    public function atualizar(string $id, array $request): void
     {
         $modelo = $this->modelo::find($id);
         $modelo->nome = isset($request['nome']) ? $request['nome'] : $modelo->nome;
         $modelo->save();
     }
 
-    public function deletar(int $id): void
+    public function deletar(string $id): void
     {
-        $this->modelo::whereId($id)->delete();
+        $this->modelo::whereIn('id', explode(',', $id))->delete();
     }
 }

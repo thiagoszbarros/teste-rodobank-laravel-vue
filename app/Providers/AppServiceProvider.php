@@ -5,11 +5,13 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use App\Interfaces\CRUD;
 use App\Http\Controllers\{
+    CaminhaoController,
     TransportadoraController,
     MotoristaController,
     ModeloController,
 };
 use App\Services\{
+    CaminhaoService,
     TransportadoraService,
     MotoristaService,
     ModeloService,
@@ -35,6 +37,10 @@ class AppServiceProvider extends ServiceProvider
             ->when(ModeloController::class)
             ->needs(CRUD::class)
             ->give(ModeloService::class);
+        $this->app
+            ->when(CaminhaoController::class)
+            ->needs(CRUD::class)
+            ->give(CaminhaoService::class);
     }
 
     /**

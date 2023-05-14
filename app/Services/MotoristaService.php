@@ -17,7 +17,7 @@ class MotoristaService implements CRUD
         return $this->motorista::select('id', 'nome', 'cpf', 'email')->get();
     }
 
-    public function obterPor(int $id): ?Motorista
+    public function obterPor(string $id): ?Motorista
     {
         return $this->motorista::select('id', 'nome', 'cpf', 'email')->find($id);
     }
@@ -34,7 +34,7 @@ class MotoristaService implements CRUD
         );
     }
 
-    public function atualizar(int $id, array $request): void
+    public function atualizar(string $id, array $request): void
     {
         $motorista = $this->motorista::find($id);
         $motorista->nome = isset($request['nome']) ? $request['nome'] : $motorista->nome;
@@ -45,9 +45,8 @@ class MotoristaService implements CRUD
         $motorista->save();
     }
 
-    public function deletar(int $id): void
+    public function deletar(string $id): void
     {
-        $this->motorista::whereId($id)
-            ->delete();
+        $this->motorista::whereIn('id', explode(',', $id))->delete();
     }
 }

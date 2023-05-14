@@ -19,7 +19,7 @@ class TransportadoraService implements CRUD
             ->get();
     }
 
-    public function obterPor(int $id): ?Transportadora
+    public function obterPor(string $id): ?Transportadora
     {
         return $this->transportadora::select('nome', 'cnpj', 'status')
             ->find($id);
@@ -31,7 +31,7 @@ class TransportadoraService implements CRUD
         $this->transportadora::create($request);
     }
 
-    public function atualizar(int $id, array $request): void
+    public function atualizar(string $id, array $request): void
     {
         $transportadora = $this->transportadora::find($id);
         $transportadora->nome = isset($request['nome']) ? $request['nome'] : $transportadora->nome;
@@ -40,8 +40,8 @@ class TransportadoraService implements CRUD
         $transportadora->save();
     }
 
-    public function deletar(int $id): void
+    public function deletar(string $id): void
     {
-        $this->transportadora::whereId($id)->delete();
+        $this->transportadora::whereIn('id', explode(',', $id))->delete();
     }
 }
