@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\AtualizarModeloRequest;
+use App\Http\Requests\CriarModeloRequest;
 use App\Interfaces\CRUD;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -46,7 +48,7 @@ class ModeloController extends Controller
         }
     }
 
-    public function store(Request $request)
+    public function store(CriarModeloRequest $request)
     {
         try {
             $this->modelo->criar($request->all());
@@ -65,7 +67,7 @@ class ModeloController extends Controller
         }
     }
 
-    public function update(Request $request, int $id)
+    public function update(AtualizarModeloRequest $request, int $id)
     {
         try {
             $this->modelo->atualizar($id, $request->all());
