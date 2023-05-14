@@ -16,7 +16,7 @@ class TransportadoraService implements ITransportadora
 
     public function obterTodos(): Collection
     {
-        return $this->transportadora::select('nome', 'cnpj', 'status')
+        return $this->transportadora::select('id', 'nome', 'cnpj', 'status')
             ->get();
     }
 
@@ -26,26 +26,19 @@ class TransportadoraService implements ITransportadora
             ->find($id);
     }
 
-    public function criar(array $transportadora): void
+    public function criar(array $request): void
     {
 
-        $this->transportadora::create(
-            [
-                'nome' => $transportadora['nome'],
-                'cnpj' => $transportadora['cnpj'],
-                'status' => TransportadoraStatus::ATIVADO->status(),
-            ]
-        );
+        $this->transportadora::create($request);
     }
 
-    public function atualizar(int $id, array $transportadora): void
+    public function atualizar(int $id, array $request): void
     {
-        $this->transportadora::whereId($id)->update(
-            [
-                'nome' => $transportadora['nome'],
-                'status' => $transportadora['status'],
-            ]
-        );
+        $transportadora = $this->transportadora::find($id);
+        $transportadora->nome = isset($request['nome']) ? $request['nome'] : $transportadora->nome;
+        $transportadora->cnpj = isset($request['cnpj']) ? $request['cnpj'] : $transportadora->cnpj;
+        $transportadora->status = isset($request['status']) ? $request['status'] : $transportadora->status;
+        $transportadora->save();
     }
 
     public function deletar(int $id): void

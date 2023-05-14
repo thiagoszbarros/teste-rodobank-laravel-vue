@@ -2,12 +2,11 @@
 
 namespace App\Http\Requests;
 
-use App\Rules\CNPJ;
-use Illuminate\Validation\Rule;
-use App\Enum\TransportadoraStatus;
+use App\Rules\CPF;
+use App\Rules\MotoristaMaiorDeIdade;
 use Illuminate\Foundation\Http\FormRequest;
 
-class AtualizarTransportadoraRequest extends FormRequest
+class CriarMotoristaRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -26,21 +25,24 @@ class AtualizarTransportadoraRequest extends FormRequest
     {
         return [
             'nome' => [
+                'required',
                 'string',
                 'max:100'
             ],
-            'cnpj' => [
+            'cpf' => [
+                'required',
                 'numeric',
-                'digits:14',
-                'unique:App\Models\Transportadora,cnpj',
-                new CNPJ,
+                'digits:11',
+                'unique:App\Models\Motorista,cpf',
+                new CPF,
             ],
-            'status' => [
-                'integer',
-                Rule::in(
-                    TransportadoraStatus::ATIVADO->status(),
-                    TransportadoraStatus::INATIVADO->status()
-                ),
+            'data_nascimento' => [
+                'required',
+                'date_format:d-m-Y',
+                new MotoristaMaiorDeIdade,
+            ],  
+            'email' => [
+                'email'
             ],
         ];
     }

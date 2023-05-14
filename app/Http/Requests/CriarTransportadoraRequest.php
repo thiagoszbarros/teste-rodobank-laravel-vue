@@ -3,11 +3,9 @@
 namespace App\Http\Requests;
 
 use App\Rules\CNPJ;
-use Illuminate\Validation\Rule;
-use App\Enum\TransportadoraStatus;
 use Illuminate\Foundation\Http\FormRequest;
 
-class AtualizarTransportadoraRequest extends FormRequest
+class CriarTransportadoraRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -26,21 +24,16 @@ class AtualizarTransportadoraRequest extends FormRequest
     {
         return [
             'nome' => [
+                'required',
                 'string',
                 'max:100'
             ],
             'cnpj' => [
                 'numeric',
-                'digits:14',
+                'required',
                 'unique:App\Models\Transportadora,cnpj',
+                'digits:14',
                 new CNPJ,
-            ],
-            'status' => [
-                'integer',
-                Rule::in(
-                    TransportadoraStatus::ATIVADO->status(),
-                    TransportadoraStatus::INATIVADO->status()
-                ),
             ],
         ];
     }

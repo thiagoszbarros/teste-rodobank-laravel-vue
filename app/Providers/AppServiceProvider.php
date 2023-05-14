@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use App\Interfaces\IMotorista;
 use App\Interfaces\ITransportadora;
+use App\Services\MotoristaService;
 use App\Services\TransportadoraService;
 use Illuminate\Support\ServiceProvider;
 
@@ -14,6 +16,7 @@ class AppServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->bind(ITransportadora::class, TransportadoraService::class);
+        $this->app->bind(IMotorista::class, MotoristaService::class);
     }
 
     /**

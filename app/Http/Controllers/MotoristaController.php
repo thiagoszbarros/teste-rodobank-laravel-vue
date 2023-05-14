@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CriarMotoristaRequest;
 use Illuminate\Http\Response;
-use App\Interfaces\ITransportadora;
-use App\Http\Requests\CriarTransportadoraRequest;
-use App\Http\Requests\AtualizarTransportadoraRequest;
+use App\Interfaces\IMotorista;
+use Illuminate\Http\Request;
 
-class TransportadoraController extends Controller
+class MotoristaController extends Controller
 {
     public function __construct(
-        private readonly ITransportadora $transportadora
+        private IMotorista $motorista
     ) {
     }
 
@@ -18,7 +18,7 @@ class TransportadoraController extends Controller
     {
         try {
             return new Response([
-                'data' => $this->transportadora->obterTodos(),
+                'data' => $this->motorista->obterTodos(),
             ], Response::HTTP_OK);
         } catch (\Exception $e) {
             return new Response(
@@ -34,9 +34,10 @@ class TransportadoraController extends Controller
     {
         try {
             return new Response([
-                'data' => $this->transportadora->obterPor($id),
+                'data' => $this->motorista->obterPor($id),
             ], Response::HTTP_OK);
         } catch (\Exception $e) {
+
             return new Response(
                 [
                     'data' => $e->getMessage(),
@@ -46,15 +47,21 @@ class TransportadoraController extends Controller
         }
     }
 
-    public function store(CriarTransportadoraRequest $request)
+    public function store(CriarMotoristaRequest $request)
     {
         try {
-            $this->transportadora->criar($request->all());
+            $this->motorista->criar([
+                'nome' => $request->nome,
+                'cpf' => $request->cpf,
+                'data_nascimento' => $request->data_nascimento,
+                'email' => $request->email,
+            ]);
 
             return new Response([
-                'data' => 'Transportadara criada com sucesso.',
+                'data' => 'Motorista criado com sucesso.',
             ], Response::HTTP_CREATED);
         } catch (\Exception $e) {
+
             return new Response(
                 [
                     'data' => $e->getMessage(),
@@ -64,13 +71,17 @@ class TransportadoraController extends Controller
         }
     }
 
-    public function update(AtualizarTransportadoraRequest $request, int $id)
+    public function update(Request $request, int $id)
     {
         try {
-            $this->transportadora->atualizar($id, $request->all());
+            $this->motorista->atualizar($id, [
+                'nome' => $request->nome,
+                'data_nascimento' => $request->data_nascimento,
+            ]);
 
             return new Response(null, Response::HTTP_NO_CONTENT);
         } catch (\Exception $e) {
+
             return new Response(
                 [
                     'data' => $e->getMessage(),
@@ -83,7 +94,7 @@ class TransportadoraController extends Controller
     public function destroy(int $id)
     {
         try {
-            $this->transportadora->deletar($id);
+            $this->motorista->deletar($id);
 
             return new Response(null, Response::HTTP_NO_CONTENT);
         } catch (\Exception $e) {
