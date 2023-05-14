@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Database\Factories\ModeloFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -21,9 +20,4 @@ class Modelo extends Model
         'updated_at',
         'deleted_at',
     ];
-
-    protected static function factory()
-    {
-        return ModeloFactory::new();
-    }
 }

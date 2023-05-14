@@ -27,6 +27,9 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make('password'),
         ]);
         \App\Models\User::factory()->count(5)->create();
+        \App\Models\Transportadora::factory()->count(5)->create();
+        \App\Models\Motorista::factory()->count(5)->create();
         \App\Models\Modelo::factory()->count(5)->create();
+        \App\Models\Caminhao::factory()->count(5)->create();
     }
 }

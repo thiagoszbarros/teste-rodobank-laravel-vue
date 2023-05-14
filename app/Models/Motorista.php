@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Motorista extends Model
 {
@@ -12,7 +12,7 @@ class Motorista extends Model
     protected $table = 'motorista';
 
     protected $primaryKey = 'id';
-    
+
     protected $fillable = [
         'id',
         'nome',

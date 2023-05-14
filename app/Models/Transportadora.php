@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Transportadora extends Model
 {
@@ -12,7 +12,7 @@ class Transportadora extends Model
     protected $table = 'transportadora';
 
     protected $primaryKey = 'id';
-    
+
     protected $fillable = [
         'id',
         'nome',
@@ -22,4 +22,5 @@ class Transportadora extends Model
         'updated_at',
         'deleted_at',
     ];
+
 }
