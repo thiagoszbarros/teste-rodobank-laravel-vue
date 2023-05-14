@@ -15,11 +15,11 @@ class ModeloController extends Controller
     ) {
     }
 
-    public function index()
+    public function index(Request $request)
     {
         try {
             return new Response([
-                'data' => $this->modelo->obterTodos(),
+                'data' => $this->modelo->obterTodos($request->query('offset')),
             ], Response::HTTP_OK);
         } catch (\Exception $e) {
             return new Response(

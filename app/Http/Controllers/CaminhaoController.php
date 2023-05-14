@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\AtualizarCaminhaoRequest;
-use App\Http\Requests\CriarCaminhaoRequest;
 use App\Interfaces\CRUD;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use App\Http\Requests\CriarCaminhaoRequest;
+use App\Http\Requests\AtualizarCaminhaoRequest;
 
 class CaminhaoController extends Controller
 {
@@ -14,11 +15,11 @@ class CaminhaoController extends Controller
     ) {
     }
 
-    public function index()
+    public function index(Request $request)
     {
         try {
             return new Response([
-                'data' => $this->modelo->obterTodos(),
+                'data' => $this->modelo->obterTodos($request->query('offset')),
             ], Response::HTTP_OK);
         } catch (\Exception $e) {
             return new Response(

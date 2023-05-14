@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Modelo;
 use App\Interfaces\CRUD;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class ModeloService implements CRUD
 {
@@ -13,9 +14,12 @@ class ModeloService implements CRUD
     ) {
     }
 
-    public function obterTodos(): Collection
+    public function obterTodos(int $offset = null): Collection|LengthAwarePaginator
     {
         return $this->modelo::select('id', 'nome')
+            ->when($offset, function ($query, $offset) {
+                $query->paginate($offset);
+            })
             ->get();
     }
 

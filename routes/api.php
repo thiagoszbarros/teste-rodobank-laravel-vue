@@ -18,7 +18,7 @@ Route::post('/login', [App\Http\Controllers\Auth\AuthController::class, 'login']
 Route::group(['middleware' => ['jwtAuth']], function () {
     Route::get('users', function () {
         return new Response([
-            'data' => App\Models\User::all(),
+            'data' => App\Models\User::select('id', 'email')->get(),
         ]);
     });
 

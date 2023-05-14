@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Interfaces\CRUD;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Http\Requests\CriarTransportadoraRequest;
 use App\Http\Requests\AtualizarTransportadoraRequest;
-use App\Interfaces\CRUD;
 
 class TransportadoraController extends Controller
 {
@@ -14,11 +15,11 @@ class TransportadoraController extends Controller
     ) {
     }
 
-    public function index()
+    public function index(Request $request)
     {
         try {
             return new Response([
-                'data' => $this->transportadora->obterTodos(),
+                'data' => $this->transportadora->obterTodos($request->query('offset')),
             ], Response::HTTP_OK);
         } catch (\Exception $e) {
             return new Response(

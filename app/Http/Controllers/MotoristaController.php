@@ -6,21 +6,20 @@ use App\Http\Requests\AtualizarMotoristaRequest;
 use App\Http\Requests\CriarMotoristaRequest;
 use App\Interfaces\CRUD;
 use Illuminate\Http\Response;
-use App\Interfaces\IMotorista;
 use Illuminate\Http\Request;
 
 class MotoristaController extends Controller
-{
+{   
     public function __construct(
         private CRUD $motorista
     ) {
     }
 
-    public function index()
+    public function index(Request $request)
     {
         try {
             return new Response([
-                'data' => $this->motorista->obterTodos(),
+                'data' => $this->motorista->obterTodos($request->query('offset')),
             ], Response::HTTP_OK);
         } catch (\Exception $e) {
             return new Response(

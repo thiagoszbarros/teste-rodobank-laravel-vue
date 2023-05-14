@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Interfaces\CRUD;
 use App\Models\Caminhao;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class CaminhaoService implements CRUD
 {
@@ -12,9 +13,12 @@ class CaminhaoService implements CRUD
         private Caminhao $caminhao
     ) {
     }
-    public function obterTodos(): Collection
+    public function obterTodos(int $offset = null): Collection|LengthAwarePaginator
     {
         return $this->caminhao::select('id', 'motorista_id', 'modelo_id', 'placa', 'cor',)
+            ->when($offset, function ($query, $offset) {
+                $query->paginate($offset);
+            })
             ->get();
     }
 
