@@ -2,12 +2,11 @@
 
 namespace App\Services;
 
+use App\Interfaces\CRUD;
 use App\Models\Motorista;
-use App\Interfaces\IMotorista;
-use DateTime;
 use Illuminate\Database\Eloquent\Collection;
 
-class MotoristaService implements IMotorista
+class MotoristaService implements CRUD
 {
     public function __construct(
         private Motorista $motorista
@@ -40,7 +39,9 @@ class MotoristaService implements IMotorista
         $motorista = $this->motorista::find($id);
         $motorista->nome = isset($request['nome']) ? $request['nome'] : $motorista->nome;
         $motorista->cpf = isset($request['cpf']) ? $request['cpf'] : $motorista->cpf;
-        $motorista->data_nascimento = isset($request['data_nascimento']) ? $motorista['data_nascimento'] : $motorista->data_nascimento;
+        $motorista->data_nascimento = isset($request['data_nascimento']) ?
+            \DateTime::createFromFormat('d-m-Y', $motorista['data_nascimento']) :
+            $motorista->data_nascimento;
         $motorista->save();
     }
 

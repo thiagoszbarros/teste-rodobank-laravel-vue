@@ -2,12 +2,11 @@
 
 namespace App\Services;
 
-use App\Enum\TransportadoraStatus;
+use App\Interfaces\CRUD;
 use App\Models\Transportadora;
-use App\Interfaces\ITransportadora;
 use Illuminate\Database\Eloquent\Collection;
 
-class TransportadoraService implements ITransportadora
+class TransportadoraService implements CRUD
 {
     public function __construct(
         private Transportadora $transportadora,

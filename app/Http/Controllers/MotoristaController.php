@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\AtualizarMotoristaRequest;
 use App\Http\Requests\CriarMotoristaRequest;
+use App\Interfaces\CRUD;
 use Illuminate\Http\Response;
 use App\Interfaces\IMotorista;
 use Illuminate\Http\Request;
@@ -10,7 +12,7 @@ use Illuminate\Http\Request;
 class MotoristaController extends Controller
 {
     public function __construct(
-        private IMotorista $motorista
+        private CRUD $motorista
     ) {
     }
 
@@ -50,12 +52,7 @@ class MotoristaController extends Controller
     public function store(CriarMotoristaRequest $request)
     {
         try {
-            $this->motorista->criar([
-                'nome' => $request->nome,
-                'cpf' => $request->cpf,
-                'data_nascimento' => $request->data_nascimento,
-                'email' => $request->email,
-            ]);
+            $this->motorista->criar($request->all());
 
             return new Response([
                 'data' => 'Motorista criado com sucesso.',
@@ -71,13 +68,10 @@ class MotoristaController extends Controller
         }
     }
 
-    public function update(Request $request, int $id)
+    public function update(AtualizarMotoristaRequest $request, int $id)
     {
         try {
-            $this->motorista->atualizar($id, [
-                'nome' => $request->nome,
-                'data_nascimento' => $request->data_nascimento,
-            ]);
+            $this->motorista->atualizar($id, $request->all());
 
             return new Response(null, Response::HTTP_NO_CONTENT);
         } catch (\Exception $e) {

@@ -2,15 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Response;
-use App\Http\Requests\CriarTransportadoraRequest;
-use App\Http\Requests\AtualizarTransportadoraRequest;
 use App\Interfaces\CRUD;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
-class TransportadoraController extends Controller
+class ModeloController extends Controller
 {
     public function __construct(
-        private readonly CRUD $transportadora
+        private CRUD $modelo
     ) {
     }
 
@@ -18,7 +17,7 @@ class TransportadoraController extends Controller
     {
         try {
             return new Response([
-                'data' => $this->transportadora->obterTodos(),
+                'data' => $this->modelo->obterTodos(),
             ], Response::HTTP_OK);
         } catch (\Exception $e) {
             return new Response(
@@ -34,9 +33,10 @@ class TransportadoraController extends Controller
     {
         try {
             return new Response([
-                'data' => $this->transportadora->obterPor($id),
+                'data' => $this->modelo->obterPor($id),
             ], Response::HTTP_OK);
         } catch (\Exception $e) {
+
             return new Response(
                 [
                     'data' => $e->getMessage(),
@@ -46,15 +46,16 @@ class TransportadoraController extends Controller
         }
     }
 
-    public function store(CriarTransportadoraRequest $request)
+    public function store(Request $request)
     {
         try {
-            $this->transportadora->criar($request->all());
+            $this->modelo->criar($request->all());
 
             return new Response([
-                'data' => 'Transportadara criada com sucesso.',
+                'data' => 'modelo criado com sucesso.',
             ], Response::HTTP_CREATED);
         } catch (\Exception $e) {
+
             return new Response(
                 [
                     'data' => $e->getMessage(),
@@ -64,13 +65,14 @@ class TransportadoraController extends Controller
         }
     }
 
-    public function update(AtualizarTransportadoraRequest $request, int $id)
+    public function update(Request $request, int $id)
     {
         try {
-            $this->transportadora->atualizar($id, $request->all());
+            $this->modelo->atualizar($id, $request->all());
 
             return new Response(null, Response::HTTP_NO_CONTENT);
         } catch (\Exception $e) {
+
             return new Response(
                 [
                     'data' => $e->getMessage(),
@@ -83,7 +85,7 @@ class TransportadoraController extends Controller
     public function destroy(int $id)
     {
         try {
-            $this->transportadora->deletar($id);
+            $this->modelo->deletar($id);
 
             return new Response(null, Response::HTTP_NO_CONTENT);
         } catch (\Exception $e) {

@@ -2,11 +2,19 @@
 
 namespace App\Providers;
 
-use App\Interfaces\IMotorista;
-use App\Interfaces\ITransportadora;
-use App\Services\MotoristaService;
-use App\Services\TransportadoraService;
 use Illuminate\Support\ServiceProvider;
+use App\Interfaces\CRUD;
+use App\Http\Controllers\{
+    TransportadoraController,
+    MotoristaController,
+    ModeloController,
+};
+use App\Services\{
+    TransportadoraService,
+    MotoristaService,
+    ModeloService,
+};
+
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -15,8 +23,18 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $this->app->bind(ITransportadora::class, TransportadoraService::class);
-        $this->app->bind(IMotorista::class, MotoristaService::class);
+        $this->app
+            ->when(TransportadoraController::class)
+            ->needs(CRUD::class)
+            ->give(TransportadoraService::class);
+        $this->app
+            ->when(MotoristaController::class)
+            ->needs(CRUD::class)
+            ->give(MotoristaService::class);
+        $this->app
+            ->when(ModeloController::class)
+            ->needs(CRUD::class)
+            ->give(ModeloService::class);
     }
 
     /**
