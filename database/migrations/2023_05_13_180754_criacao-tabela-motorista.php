@@ -17,7 +17,7 @@ return new class extends Migration
             $tabela->string('nome', 100)
                 ->nullable(false)
                 ->comment('Nome do motorista');
-            $tabela->string('cpf', 11)
+            $tabela->string('cpf', 11)->unique()
                 ->nullable(false)
                 ->comment('CPF da motorista');
             $tabela->dateTime('data_nascimento')

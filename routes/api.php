@@ -1,6 +1,5 @@
 <?php
 
-use App\Models\User;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Route;
 /*
@@ -19,7 +18,9 @@ Route::post('/login', [App\Http\Controllers\Auth\AuthController::class, 'login']
 Route::group(['middleware' => ['jwtAuth']], function () {
     Route::get('users', function () {
         return new Response([
-            'data' => User::all(),
+            'data' => App\Models\User::all(),
         ]);
     });
+
+    Route::apiResource('transportadoras',  App\Http\Controllers\TransportadoraController::class);
 });

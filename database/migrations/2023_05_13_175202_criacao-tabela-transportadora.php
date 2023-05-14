@@ -18,7 +18,7 @@ return new class extends Migration
                 ->nullable(false)
                 ->comment('Nome da transportadora');
             $tabela->string('cnpj', 14)
-                ->nullable(false)
+                ->nullable(false)->unique()
                 ->comment('CNPJ da transportadora');
             $tabela->tinyinteger('status')
                 ->nullable(false)
