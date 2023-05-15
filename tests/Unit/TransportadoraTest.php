@@ -8,6 +8,7 @@ use App\Http\Requests\CriarTransportadoraRequest;
 use App\Interfaces\CRUD;
 use App\Models\Transportadora;
 use Avlima\PhpCpfCnpjGenerator\Generator;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Mockery;
@@ -20,9 +21,7 @@ class TransportadoraTest extends TestCase
     {
         $request = new Request();
         $resource = (object) [];
-        $resultadoEsperado = new Response([
-            'data' => $resource,
-        ]);
+        $resultadoEsperado = new JsonResponse($resource);
         $servico = Mockery::mock(CRUD::class);
         $servico->shouldReceive('obterTodos')->andReturn($resource);
 
@@ -34,9 +33,7 @@ class TransportadoraTest extends TestCase
     {
         $id = '1';
         $resource = new Transportadora();
-        $resultadoEsperado = new Response([
-            'data' => $resource,
-        ]);
+        $resultadoEsperado = new JsonResponse($resource);
         $servico = Mockery::mock(CRUD::class);
         $servico->shouldReceive('obterPor')->andReturn($resource);
 
@@ -53,10 +50,8 @@ class TransportadoraTest extends TestCase
             'cnpj' => Generator::cnpj(),
         ]);
 
-        $resultadoEsperado = new Response(
-            [
-                'data' => 'Transportadora criada com sucesso.',
-            ],
+        $resultadoEsperado = new JsonResponse(
+            'Transportadora criada com sucesso.',
             Response::HTTP_CREATED
         );
 
@@ -76,7 +71,7 @@ class TransportadoraTest extends TestCase
             'cnpj' => Generator::cnpj(),
         ]);
 
-        $resultadoEsperado = new Response(
+        $resultadoEsperado = new JsonResponse(
             null,
             Response::HTTP_NO_CONTENT
         );
@@ -93,7 +88,7 @@ class TransportadoraTest extends TestCase
     {
         $id = '1';
 
-        $resultadoEsperado = new Response(
+        $resultadoEsperado = new JsonResponse(
             null,
             Response::HTTP_NO_CONTENT
         );
@@ -110,7 +105,7 @@ class TransportadoraTest extends TestCase
     {
         $id = '1,2,3,4';
 
-        $resultadoEsperado = new Response(
+        $resultadoEsperado = new JsonResponse(
             null,
             Response::HTTP_NO_CONTENT
         );

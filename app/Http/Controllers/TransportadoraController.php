@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\AtualizarTransportadoraRequest;
 use App\Http\Requests\CriarTransportadoraRequest;
 use App\Interfaces\CRUD;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
@@ -15,83 +16,76 @@ class TransportadoraController extends Controller
     ) {
     }
 
-    public function index(Request $request)
+    public function index(Request $request): JsonResponse
     {
         try {
-            return new Response([
-                'data' => $this->transportadora->obterTodos($request->query('offset')),
-            ], Response::HTTP_OK);
+            return new JsonResponse(
+                $this->transportadora->obterTodos($request->query('offset')),
+                Response::HTTP_OK
+            );
         } catch (\Exception $e) {
-            return new Response(
-                [
-                    'data' => $e->getMessage(),
-                ],
+            return new JsonResponse(
+                $e->getMessage(),
                 Response::HTTP_BAD_REQUEST
             );
         }
     }
 
-    public function show(string $id)
+    public function show(string $id): JsonResponse
     {
         try {
-            return new Response([
-                'data' => $this->transportadora->obterPor($id),
-            ], Response::HTTP_OK);
+            return new JsonResponse(
+                $this->transportadora->obterPor($id),
+                Response::HTTP_OK
+            );
         } catch (\Exception $e) {
-            return new Response(
-                [
-                    'data' => $e->getMessage(),
-                ],
+            return new JsonResponse(
+                $e->getMessage(),
                 Response::HTTP_BAD_REQUEST
             );
         }
     }
 
-    public function store(CriarTransportadoraRequest $request)
+    public function store(CriarTransportadoraRequest $request): JsonResponse
     {
         try {
             $this->transportadora->criar($request->all());
 
-            return new Response([
-                'data' => 'Transportadora criada com sucesso.',
-            ], Response::HTTP_CREATED);
+            return new JsonResponse(
+                'Transportadora criada com sucesso.',
+                Response::HTTP_CREATED
+            );
         } catch (\Exception $e) {
-            return new Response(
-                [
-                    'data' => $e->getMessage(),
-                ],
+            return new JsonResponse(
+                $e->getMessage(),
                 Response::HTTP_BAD_REQUEST
             );
         }
     }
 
-    public function update(AtualizarTransportadoraRequest $request, string $id)
+    public function update(AtualizarTransportadoraRequest $request, string $id): JsonResponse
     {
         try {
             $this->transportadora->atualizar($id, $request->all());
 
-            return new Response(null, Response::HTTP_NO_CONTENT);
+            return new JsonResponse(null, Response::HTTP_NO_CONTENT);
         } catch (\Exception $e) {
-            return new Response(
-                [
-                    'data' => $e->getMessage(),
-                ],
+            return new JsonResponse(
+                $e->getMessage(),
                 Response::HTTP_BAD_REQUEST
             );
         }
     }
 
-    public function destroy(string $id)
+    public function destroy(string $id): JsonResponse
     {
         try {
             $this->transportadora->deletar($id);
 
-            return new Response(null, Response::HTTP_NO_CONTENT);
+            return new JsonResponse(null, Response::HTTP_NO_CONTENT);
         } catch (\Exception $e) {
-            return new Response(
-                [
-                    'data' => $e->getMessage(),
-                ],
+            return new JsonResponse(
+                $e->getMessage(),
                 Response::HTTP_BAD_REQUEST
             );
         }
