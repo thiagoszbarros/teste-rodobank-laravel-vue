@@ -6,10 +6,9 @@ use App\Rules\CPF;
 use Illuminate\Translation\ArrayLoader;
 use Illuminate\Translation\Translator;
 use Illuminate\Validation\Factory as ValidationFactory;
-use PHPUnit\Framework\TestCase;
-
 use function PHPUnit\Framework\assertFalse;
 use function PHPUnit\Framework\assertTrue;
+use PHPUnit\Framework\TestCase;
 
 class CPFTest extends TestCase
 {

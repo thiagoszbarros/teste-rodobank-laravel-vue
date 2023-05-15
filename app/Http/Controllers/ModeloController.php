@@ -31,7 +31,7 @@ class ModeloController extends Controller
         }
     }
 
-    public function show(int $id)
+    public function show(string $id)
     {
         try {
             return new Response([
@@ -67,7 +67,7 @@ class ModeloController extends Controller
         }
     }
 
-    public function update(AtualizarModeloRequest $request, int $id)
+    public function update(AtualizarModeloRequest $request, string $id)
     {
         try {
             $this->modelo->atualizar($id, $request->all());
@@ -84,7 +84,7 @@ class ModeloController extends Controller
         }
     }
 
-    public function destroy(int $id)
+    public function destroy(string $id)
     {
         try {
             $this->modelo->deletar($id);

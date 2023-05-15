@@ -26,7 +26,7 @@ class CriarTransportadoraRequest extends FormRequest
             'nome' => [
                 'required',
                 'string',
-                'max:100'
+                'max:100',
             ],
             'cnpj' => [
                 'numeric',

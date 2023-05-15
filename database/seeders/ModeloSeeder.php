@@ -13,7 +13,7 @@ class ModeloSeeder extends Seeder
     public function run(): void
     {
         Modelo::factory()
-        ->count(5)
-        ->create();
+            ->count(5)
+            ->create();
     }
 }

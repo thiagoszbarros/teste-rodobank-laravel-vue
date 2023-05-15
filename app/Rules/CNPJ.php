@@ -10,10 +10,7 @@ class CNPJ implements ValidationRule
     /**
      * Run the validation rule.
      *
-     * @param  string  $attribute
-     * @param  mixed  $value
      * @param  \Closure(string): \Illuminate\Translation\PotentiallyTranslatedString  $fail
-     * @return void
      */
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
@@ -23,9 +20,7 @@ class CNPJ implements ValidationRule
 
         if (strlen($c) != 14) {
             $fail('O campo :attribute não é um CNPJ válido.');
-        }
-
-        else if (preg_match("/^{$c[0]}{14}$/", $c) > 0) {
+        } elseif (preg_match("/^{$c[0]}{14}$/", $c) > 0) {
             $fail('O campo :attribute não é um CNPJ válido.');
         }
 

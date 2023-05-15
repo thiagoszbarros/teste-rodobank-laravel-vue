@@ -2,16 +2,15 @@
 
 namespace Tests\Feature\Rules;
 
-use DateTime;
-use DateInterval;
-use PHPUnit\Framework\TestCase;
 use App\Rules\MotoristaMaiorDeIdade;
-use Illuminate\Translation\Translator;
-
+use DateInterval;
+use DateTime;
 use Illuminate\Translation\ArrayLoader;
-use function PHPUnit\Framework\assertTrue;
-use function PHPUnit\Framework\assertFalse;
+use Illuminate\Translation\Translator;
 use Illuminate\Validation\Factory as ValidationFactory;
+use function PHPUnit\Framework\assertFalse;
+use function PHPUnit\Framework\assertTrue;
+use PHPUnit\Framework\TestCase;
 
 class MotoristaMaiorDeIdadeTest extends TestCase
 {

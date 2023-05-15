@@ -6,16 +6,12 @@ use App\Rules\CNPJ;
 use Illuminate\Translation\ArrayLoader;
 use Illuminate\Translation\Translator;
 use Illuminate\Validation\Factory as ValidationFactory;
-use PHPUnit\Framework\TestCase;
-
 use function PHPUnit\Framework\assertFalse;
 use function PHPUnit\Framework\assertTrue;
-
-
+use PHPUnit\Framework\TestCase;
 
 class CNPJTest extends TestCase
 {
-
     public function test_retorna_true_cnpj_valido_for_passado(): void
     {
         $regra = ['cnpj' => [new CNPJ]];

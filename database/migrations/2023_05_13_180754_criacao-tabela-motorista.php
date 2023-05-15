@@ -1,9 +1,9 @@
 <?php
 
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Database\Migrations\Migration;
 
 return new class extends Migration
 {
@@ -26,6 +26,12 @@ return new class extends Migration
             $tabela->string('email', 100)
                 ->nullable(false)
                 ->comment('Email do motorista');
+            $tabela->biginteger('transportadora_id')
+                ->nullable(false)
+                ->comment('Referência da transportadora');
+            $tabela->foreign('transportadora_id')
+                ->references('id')
+                ->on('transportadora');
             $tabela->dateTime('created_at');
             $tabela->dateTime('updated_at');
             $tabela->dateTime('deleted_at')->nullable();

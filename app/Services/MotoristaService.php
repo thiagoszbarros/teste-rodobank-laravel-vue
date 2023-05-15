@@ -4,7 +4,6 @@ namespace App\Services;
 
 use App\Interfaces\CRUD;
 use App\Models\Motorista;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 class MotoristaService implements CRUD
@@ -13,13 +12,14 @@ class MotoristaService implements CRUD
         private Motorista $motorista
     ) {
     }
-    public function obterTodos(int $offset = null): Collection|LengthAwarePaginator
+
+    public function obterTodos(int $offset = null): LengthAwarePaginator
     {
-        return $this->motorista::select('id', 'nome', 'cpf', 'email')
-            ->when($offset, function ($query, $offset) {
-                $query->paginate($offset);
-            })
-            ->get();
+        $offset = isset($offset) ? $offset : Motorista::count();
+
+        return $this->motorista::with('caminhoes:id,motorista_id,placa')
+            ->select('id', 'nome', 'cpf', 'email')
+            ->paginate($offset);
     }
 
     public function obterPor(string $id): ?Motorista
@@ -35,6 +35,7 @@ class MotoristaService implements CRUD
                 'cpf' => $request['cpf'],
                 'data_nascimento' => \DateTime::createFromFormat('d-m-Y', $request['data_nascimento']),
                 'email' => $request['email'],
+                'transportadora_id' => $request['transportadora_id'],
             ]
         );
     }
@@ -45,8 +46,9 @@ class MotoristaService implements CRUD
         $motorista->nome = isset($request['nome']) ? $request['nome'] : $motorista->nome;
         $motorista->cpf = isset($request['cpf']) ? $request['cpf'] : $motorista->cpf;
         $motorista->data_nascimento = isset($request['data_nascimento']) ?
-            \DateTime::createFromFormat('d-m-Y', $motorista['data_nascimento']) :
+            \DateTime::createFromFormat('d-m-Y', $request['data_nascimento']) :
             $motorista->data_nascimento;
+        $motorista->transportadora_id = isset($request['transportadora_id']) ? $request['transportadora_id'] : $motorista->transportadora_id;
         $motorista->save();
     }
 

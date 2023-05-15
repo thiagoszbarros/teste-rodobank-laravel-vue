@@ -27,7 +27,7 @@ class CriarMotoristaRequest extends FormRequest
             'nome' => [
                 'required',
                 'string',
-                'max:100'
+                'max:100',
             ],
             'cpf' => [
                 'required',
@@ -40,9 +40,13 @@ class CriarMotoristaRequest extends FormRequest
                 'required',
                 'date_format:d-m-Y',
                 new MotoristaMaiorDeIdade,
-            ],  
+            ],
             'email' => [
-                'email'
+                'email',
+            ],
+            'transportadora_id' => [
+                'required',
+                'integer',
             ],
         ];
     }

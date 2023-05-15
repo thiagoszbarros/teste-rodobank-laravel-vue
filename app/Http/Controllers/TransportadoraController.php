@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\AtualizarTransportadoraRequest;
+use App\Http\Requests\CriarTransportadoraRequest;
 use App\Interfaces\CRUD;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use App\Http\Requests\CriarTransportadoraRequest;
-use App\Http\Requests\AtualizarTransportadoraRequest;
 
 class TransportadoraController extends Controller
 {
@@ -31,7 +31,7 @@ class TransportadoraController extends Controller
         }
     }
 
-    public function show(int $id)
+    public function show(string $id)
     {
         try {
             return new Response([
@@ -53,7 +53,7 @@ class TransportadoraController extends Controller
             $this->transportadora->criar($request->all());
 
             return new Response([
-                'data' => 'Transportadara criada com sucesso.',
+                'data' => 'Transportadora criada com sucesso.',
             ], Response::HTTP_CREATED);
         } catch (\Exception $e) {
             return new Response(
@@ -65,7 +65,7 @@ class TransportadoraController extends Controller
         }
     }
 
-    public function update(AtualizarTransportadoraRequest $request, int $id)
+    public function update(AtualizarTransportadoraRequest $request, string $id)
     {
         try {
             $this->transportadora->atualizar($id, $request->all());
@@ -81,7 +81,7 @@ class TransportadoraController extends Controller
         }
     }
 
-    public function destroy(int $id)
+    public function destroy(string $id)
     {
         try {
             $this->transportadora->deletar($id);

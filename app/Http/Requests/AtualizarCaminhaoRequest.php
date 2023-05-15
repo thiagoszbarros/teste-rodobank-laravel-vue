@@ -25,18 +25,21 @@ class AtualizarCaminhaoRequest extends FormRequest
             'placa' => [
                 'string',
                 'unique:App\Models\Caminhao,placa',
-                'size:8'
+                'size:8',
             ],
             'motorista_id' => [
-                'integer'
+                'integer',
             ],
             'modelo_id' => [
-                'integer'
+                'integer',
             ],
             'cor' => [
                 'string',
-                'max:50'
-            ]
+                'max:50',
+            ],
+            'transportadora_id' => [
+                'integer',
+            ],
         ];
     }
 }

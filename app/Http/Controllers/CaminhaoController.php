@@ -2,16 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\AtualizarCaminhaoRequest;
+use App\Http\Requests\CriarCaminhaoRequest;
 use App\Interfaces\CRUD;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use App\Http\Requests\CriarCaminhaoRequest;
-use App\Http\Requests\AtualizarCaminhaoRequest;
 
 class CaminhaoController extends Controller
 {
     public function __construct(
-        private CRUD $modelo
+        private CRUD $caminhao
     ) {
     }
 
@@ -19,7 +19,7 @@ class CaminhaoController extends Controller
     {
         try {
             return new Response([
-                'data' => $this->modelo->obterTodos($request->query('offset')),
+                'data' => $this->caminhao->obterTodos($request->query('offset')),
             ], Response::HTTP_OK);
         } catch (\Exception $e) {
             return new Response(
@@ -31,11 +31,11 @@ class CaminhaoController extends Controller
         }
     }
 
-    public function show(int $id)
+    public function show(string $id)
     {
         try {
             return new Response([
-                'data' => $this->modelo->obterPor($id),
+                'data' => $this->caminhao->obterPor($id),
             ], Response::HTTP_OK);
         } catch (\Exception $e) {
 
@@ -51,10 +51,10 @@ class CaminhaoController extends Controller
     public function store(CriarCaminhaoRequest $request)
     {
         try {
-            $this->modelo->criar($request->all());
+            $this->caminhao->criar($request->all());
 
             return new Response([
-                'data' => 'modelo criado com sucesso.',
+                'data' => 'Caminhao criado com sucesso.',
             ], Response::HTTP_CREATED);
         } catch (\Exception $e) {
 
@@ -67,10 +67,10 @@ class CaminhaoController extends Controller
         }
     }
 
-    public function update(AtualizarCaminhaoRequest $request, int $id)
+    public function update(AtualizarCaminhaoRequest $request, string $id)
     {
         try {
-            $this->modelo->atualizar($id, $request->all());
+            $this->caminhao->atualizar($id, $request->all());
 
             return new Response(null, Response::HTTP_NO_CONTENT);
         } catch (\Exception $e) {
@@ -84,10 +84,10 @@ class CaminhaoController extends Controller
         }
     }
 
-    public function destroy($id)
+    public function destroy(string $id)
     {
         try {
-            $this->modelo->deletar($id);
+            $this->caminhao->deletar($id);
 
             return new Response(null, Response::HTTP_NO_CONTENT);
         } catch (\Exception $e) {

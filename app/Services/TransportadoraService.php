@@ -4,7 +4,6 @@ namespace App\Services;
 
 use App\Interfaces\CRUD;
 use App\Models\Transportadora;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 class TransportadoraService implements CRUD
@@ -14,13 +13,13 @@ class TransportadoraService implements CRUD
     ) {
     }
 
-    public function obterTodos(int $offset = null): Collection|LengthAwarePaginator
+    public function obterTodos(int $offset = null): LengthAwarePaginator
     {
-        return $this->transportadora::select('id', 'nome', 'cnpj', 'status')
-            ->when($offset, function ($query, $offset) {
-                $query->paginate($offset);
-            })
-            ->get();
+        $offset = isset($offset) ? $offset : Transportadora::count();
+
+        return $this->transportadora::with('motoristas:id,transportadora_id')
+            ->select('id', 'nome', 'cnpj', 'status')
+            ->paginate($offset);
     }
 
     public function obterPor(string $id): ?Transportadora
@@ -32,7 +31,12 @@ class TransportadoraService implements CRUD
     public function criar(array $request): void
     {
 
-        $this->transportadora::create($request);
+        $this->transportadora::create(
+            [
+                'nome' => $request['nome'],
+                'cnpj' => $request['cnpj'],
+            ]
+        );
     }
 
     public function atualizar(string $id, array $request): void

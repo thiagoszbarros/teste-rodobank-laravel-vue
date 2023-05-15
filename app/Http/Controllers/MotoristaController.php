@@ -5,11 +5,11 @@ namespace App\Http\Controllers;
 use App\Http\Requests\AtualizarMotoristaRequest;
 use App\Http\Requests\CriarMotoristaRequest;
 use App\Interfaces\CRUD;
-use Illuminate\Http\Response;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class MotoristaController extends Controller
-{   
+{
     public function __construct(
         private CRUD $motorista
     ) {
@@ -31,7 +31,7 @@ class MotoristaController extends Controller
         }
     }
 
-    public function show(int $id)
+    public function show(string $id)
     {
         try {
             return new Response([
@@ -67,7 +67,7 @@ class MotoristaController extends Controller
         }
     }
 
-    public function update(AtualizarMotoristaRequest $request, int $id)
+    public function update(AtualizarMotoristaRequest $request, string $id)
     {
         try {
             $this->motorista->atualizar($id, $request->all());
@@ -84,7 +84,7 @@ class MotoristaController extends Controller
         }
     }
 
-    public function destroy(int $id)
+    public function destroy(string $id)
     {
         try {
             $this->motorista->deletar($id);

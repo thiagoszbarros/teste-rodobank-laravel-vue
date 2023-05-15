@@ -2,10 +2,10 @@
 
 namespace App\Http\Requests;
 
-use App\Rules\CNPJ;
-use Illuminate\Validation\Rule;
 use App\Enum\TransportadoraStatus;
+use App\Rules\CNPJ;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class AtualizarTransportadoraRequest extends FormRequest
 {
@@ -27,7 +27,7 @@ class AtualizarTransportadoraRequest extends FormRequest
         return [
             'nome' => [
                 'string',
-                'max:100'
+                'max:100',
             ],
             'cnpj' => [
                 'numeric',

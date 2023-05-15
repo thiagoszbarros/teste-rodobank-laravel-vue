@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Route;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -22,8 +23,8 @@ Route::group(['middleware' => ['jwtAuth']], function () {
         ]);
     });
 
-    Route::apiResource('transportadoras',  App\Http\Controllers\TransportadoraController::class);
-    Route::apiResource('motoristas',  App\Http\Controllers\MotoristaController::class);
-    Route::apiResource('modelos',  App\Http\Controllers\ModeloController::class);
-    Route::apiResource('caminhoes',  App\Http\Controllers\CaminhaoController::class);
+    Route::apiResource('transportadoras', App\Http\Controllers\TransportadoraController::class);
+    Route::apiResource('motoristas', App\Http\Controllers\MotoristaController::class);
+    Route::apiResource('modelos', App\Http\Controllers\ModeloController::class);
+    Route::apiResource('caminhoes', App\Http\Controllers\CaminhaoController::class);
 });

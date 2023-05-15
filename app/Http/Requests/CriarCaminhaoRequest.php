@@ -27,21 +27,25 @@ class CriarCaminhaoRequest extends FormRequest
                 'string',
                 'unique:App\Models\Caminhao,placa',
                 'size:8',
-                'regex:/[A-Z]{3}-\d[A-Z]\d{2}/'
+                'regex:/[A-Z]{3}-\d[A-Z]\d{2}/',
             ],
             'motorista_id' => [
                 'required',
-                'integer'
+                'integer',
             ],
             'modelo_id' => [
                 'required',
-                'integer'
+                'integer',
             ],
             'cor' => [
                 'required',
                 'string',
-                'max:50'
-            ]
+                'max:50',
+            ],
+            'transportadora_id' => [
+                'required',
+                'integer',
+            ],
         ];
     }
 }

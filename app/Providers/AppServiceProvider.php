@@ -2,21 +2,16 @@
 
 namespace App\Providers;
 
-use Illuminate\Support\ServiceProvider;
+use App\Http\Controllers\CaminhaoController;
+use App\Http\Controllers\ModeloController;
+use App\Http\Controllers\MotoristaController;
+use App\Http\Controllers\TransportadoraController;
 use App\Interfaces\CRUD;
-use App\Http\Controllers\{
-    CaminhaoController,
-    TransportadoraController,
-    MotoristaController,
-    ModeloController,
-};
-use App\Services\{
-    CaminhaoService,
-    TransportadoraService,
-    MotoristaService,
-    ModeloService,
-};
-
+use App\Services\CaminhaoService;
+use App\Services\ModeloService;
+use App\Services\MotoristaService;
+use App\Services\TransportadoraService;
+use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {

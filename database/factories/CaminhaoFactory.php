@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\Modelo;
 use App\Models\Motorista;
+use App\Models\Transportadora;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -16,7 +17,6 @@ class CaminhaoFactory extends Factory
      *
      * @return array<string, mixed>
      */
-
     public function definition(): array
     {
 
@@ -25,19 +25,20 @@ class CaminhaoFactory extends Factory
             'cor' => fake()->colorName,
             'modelo_id' => Modelo::factory(),
             'motorista_id' => Motorista::factory(),
+            'transportadora_id' => Transportadora::factory(),
         ];
     }
 
-    private static function placa(): string
+    public static function placa(): string
     {
         return
-            chr(rand(65, 90)) .
-            chr(rand(65, 90)) .
-            chr(rand(65, 90)) .
-            '-' .
-            strval(rand(0, 9)) .
-            chr(rand(65, 90)) .
-            strval(rand(0, 9)) .
+            chr(rand(65, 90)).
+            chr(rand(65, 90)).
+            chr(rand(65, 90)).
+            '-'.
+            strval(rand(0, 9)).
+            chr(rand(65, 90)).
+            strval(rand(0, 9)).
             strval(rand(0, 9));
     }
 }

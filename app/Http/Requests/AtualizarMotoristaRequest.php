@@ -26,7 +26,7 @@ class AtualizarMotoristaRequest extends FormRequest
         return [
             'nome' => [
                 'string',
-                'max:100'
+                'max:100',
             ],
             'cpf' => [
                 'numeric',
@@ -37,10 +37,13 @@ class AtualizarMotoristaRequest extends FormRequest
             'data_nascimento' => [
                 'date_format:d-m-Y',
                 new MotoristaMaiorDeIdade,
-            ],  
+            ],
             'email' => [
-                'email'
-            ]
+                'email',
+            ],
+            'transportadora_id' => [
+                'integer',
+            ],
         ];
     }
 }
