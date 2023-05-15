@@ -7,8 +7,8 @@ use App\Http\Requests\AtualizarModeloRequest;
 use App\Http\Requests\CriarModeloRequest;
 use App\Interfaces\CRUD;
 use App\Models\Modelo;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Mockery;
 use function PHPUnit\Framework\assertEquals;
 use PHPUnit\Framework\TestCase;
@@ -19,9 +19,7 @@ class ModeloTest extends TestCase
     {
         $request = new Request();
         $resource = (object) [];
-        $resultadoEsperado = new Response([
-            'data' => $resource,
-        ]);
+        $resultadoEsperado = new JsonResponse($resource);
         $servico = Mockery::mock(CRUD::class);
         $servico->shouldReceive('obterTodos')->andReturn($resource);
 
@@ -33,9 +31,7 @@ class ModeloTest extends TestCase
     {
         $id = '1';
         $resource = new Modelo();
-        $resultadoEsperado = new Response([
-            'data' => $resource,
-        ]);
+        $resultadoEsperado = new JsonResponse($resource);
         $servico = Mockery::mock(CRUD::class);
         $servico->shouldReceive('obterPor')->andReturn($resource);
 
@@ -51,11 +47,8 @@ class ModeloTest extends TestCase
             'nome' => fake()->name(),
         ]);
 
-        $resultadoEsperado = new Response(
-            [
-                'data' => 'Modelo criado com sucesso.',
-            ],
-            Response::HTTP_CREATED
+        $resultadoEsperado = new JsonResponse('Modelo criado com sucesso.',
+            JsonResponse::HTTP_CREATED
         );
 
         $servico = Mockery::mock(CRUD::class);
@@ -73,9 +66,9 @@ class ModeloTest extends TestCase
             'nome' => fake()->name(),
         ]);
 
-        $resultadoEsperado = new Response(
+        $resultadoEsperado = new JsonResponse(
             null,
-            Response::HTTP_NO_CONTENT
+            JsonResponse::HTTP_NO_CONTENT
         );
 
         $servico = Mockery::mock(CRUD::class);
@@ -90,9 +83,9 @@ class ModeloTest extends TestCase
     {
         $id = '1';
 
-        $resultadoEsperado = new Response(
+        $resultadoEsperado = new JsonResponse(
             null,
-            Response::HTTP_NO_CONTENT
+            JsonResponse::HTTP_NO_CONTENT
         );
 
         $servico = Mockery::mock(CRUD::class);
@@ -107,9 +100,9 @@ class ModeloTest extends TestCase
     {
         $id = '1,2,3,4';
 
-        $resultadoEsperado = new Response(
+        $resultadoEsperado = new JsonResponse(
             null,
-            Response::HTTP_NO_CONTENT
+            JsonResponse::HTTP_NO_CONTENT
         );
 
         $servico = Mockery::mock(CRUD::class);
