@@ -5,8 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Requests\AtualizarMotoristaRequest;
 use App\Http\Requests\CriarMotoristaRequest;
 use App\Interfaces\CRUD;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 
 class MotoristaController extends Controller
 {
@@ -15,87 +15,80 @@ class MotoristaController extends Controller
     ) {
     }
 
-    public function index(Request $request)
+    public function index(Request $request): JsonResponse
     {
         try {
-            return new Response([
-                'data' => $this->motorista->obterTodos($request->query('offset')),
-            ], Response::HTTP_OK);
+            return new JsonResponse(
+                $this->motorista->obterTodos($request->query('offset')),
+                JsonResponse::HTTP_OK
+            );
         } catch (\Exception $e) {
-            return new Response(
-                [
-                    'data' => $e->getMessage(),
-                ],
-                Response::HTTP_BAD_REQUEST
+            return new JsonResponse(
+                $e->getMessage(),
+                JsonResponse::HTTP_BAD_REQUEST
             );
         }
     }
 
-    public function show(string $id)
+    public function show(string $id): JsonResponse
     {
         try {
-            return new Response([
-                'data' => $this->motorista->obterPor($id),
-            ], Response::HTTP_OK);
+            return new JsonResponse(
+                $this->motorista->obterPor($id),
+                JsonResponse::HTTP_OK
+            );
         } catch (\Exception $e) {
 
-            return new Response(
-                [
-                    'data' => $e->getMessage(),
-                ],
-                Response::HTTP_BAD_REQUEST
+            return new JsonResponse(
+                $e->getMessage(),
+                JsonResponse::HTTP_BAD_REQUEST
             );
         }
     }
 
-    public function store(CriarMotoristaRequest $request)
+    public function store(CriarMotoristaRequest $request): JsonResponse
     {
         try {
             $this->motorista->criar($request->all());
 
-            return new Response([
-                'data' => 'Motorista criado com sucesso.',
-            ], Response::HTTP_CREATED);
+            return new JsonResponse(
+                'Motorista criado com sucesso.',
+                JsonResponse::HTTP_CREATED
+            );
         } catch (\Exception $e) {
 
-            return new Response(
-                [
-                    'data' => $e->getMessage(),
-                ],
-                Response::HTTP_BAD_REQUEST
+            return new JsonResponse(
+                $e->getMessage(),
+                JsonResponse::HTTP_BAD_REQUEST
             );
         }
     }
 
-    public function update(AtualizarMotoristaRequest $request, string $id)
+    public function update(AtualizarMotoristaRequest $request, string $id): JsonResponse
     {
         try {
             $this->motorista->atualizar($id, $request->all());
 
-            return new Response(null, Response::HTTP_NO_CONTENT);
+            return new JsonResponse(null, JsonResponse::HTTP_NO_CONTENT);
         } catch (\Exception $e) {
 
-            return new Response(
-                [
-                    'data' => $e->getMessage(),
-                ],
-                Response::HTTP_BAD_REQUEST
+            return new JsonResponse(
+                $e->getMessage(),
+                JsonResponse::HTTP_BAD_REQUEST
             );
         }
     }
 
-    public function destroy(string $id)
+    public function destroy(string $id): JsonResponse
     {
         try {
             $this->motorista->deletar($id);
 
-            return new Response(null, Response::HTTP_NO_CONTENT);
+            return new JsonResponse(null, JsonResponse::HTTP_NO_CONTENT);
         } catch (\Exception $e) {
-            return new Response(
-                [
-                    'data' => $e->getMessage(),
-                ],
-                Response::HTTP_BAD_REQUEST
+            return new JsonResponse(
+                $e->getMessage(),
+                JsonResponse::HTTP_BAD_REQUEST
             );
         }
     }

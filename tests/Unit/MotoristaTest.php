@@ -10,8 +10,8 @@ use App\Models\Motorista;
 use Avlima\PhpCpfCnpjGenerator\Generator;
 use DateInterval;
 use DateTime;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Mockery;
 use function PHPUnit\Framework\assertEquals;
 use PHPUnit\Framework\TestCase;
@@ -22,9 +22,7 @@ class MotoristaTest extends TestCase
     {
         $request = new Request();
         $resource = (object) [];
-        $resultadoEsperado = new Response([
-            'data' => $resource,
-        ]);
+        $resultadoEsperado = new JsonResponse($resource);
         $servico = Mockery::mock(CRUD::class);
         $servico->shouldReceive('obterTodos')->andReturn($resource);
 
@@ -36,9 +34,7 @@ class MotoristaTest extends TestCase
     {
         $id = '1';
         $resource = new Motorista();
-        $resultadoEsperado = new Response([
-            'data' => $resource,
-        ]);
+        $resultadoEsperado = new JsonResponse($resource);
         $servico = Mockery::mock(CRUD::class);
         $servico->shouldReceive('obterPor')->andReturn($resource);
 
@@ -57,11 +53,9 @@ class MotoristaTest extends TestCase
             'email' => fake()->email(),
         ]);
 
-        $resultadoEsperado = new Response(
-            [
-                'data' => 'Motorista criado com sucesso.',
-            ],
-            Response::HTTP_CREATED
+        $resultadoEsperado = new JsonResponse(
+            'Motorista criado com sucesso.',
+            JsonResponse::HTTP_CREATED
         );
 
         $servico = Mockery::mock(CRUD::class);
@@ -82,9 +76,9 @@ class MotoristaTest extends TestCase
             'email' => fake()->email(),
         ]);
 
-        $resultadoEsperado = new Response(
+        $resultadoEsperado = new JsonResponse(
             null,
-            Response::HTTP_NO_CONTENT
+            JsonResponse::HTTP_NO_CONTENT
         );
 
         $servico = Mockery::mock(CRUD::class);
@@ -99,9 +93,9 @@ class MotoristaTest extends TestCase
     {
         $id = '1';
 
-        $resultadoEsperado = new Response(
+        $resultadoEsperado = new JsonResponse(
             null,
-            Response::HTTP_NO_CONTENT
+            JsonResponse::HTTP_NO_CONTENT
         );
 
         $servico = Mockery::mock(CRUD::class);
@@ -116,9 +110,9 @@ class MotoristaTest extends TestCase
     {
         $id = '1,2,3,4';
 
-        $resultadoEsperado = new Response(
+        $resultadoEsperado = new JsonResponse(
             null,
-            Response::HTTP_NO_CONTENT
+            JsonResponse::HTTP_NO_CONTENT
         );
 
         $servico = Mockery::mock(CRUD::class);
