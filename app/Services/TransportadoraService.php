@@ -17,7 +17,7 @@ class TransportadoraService implements CRUD
     {
         $offset = isset($offset) ? $offset : Transportadora::count();
 
-        return $this->transportadora::with('motoristas:id,transportadora_id')
+        return $this->transportadora::with('motoristas:id,transportadora_id,nome')
             ->select('id', 'nome', 'cnpj', 'status')
             ->paginate($offset);
     }
