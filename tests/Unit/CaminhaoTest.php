@@ -5,10 +5,10 @@ namespace Tests\Unit;
 use App\Http\Controllers\CaminhaoController;
 use App\Http\Requests\AtualizarCaminhaoRequest;
 use App\Http\Requests\CriarCaminhaoRequest;
+use App\Http\Requests\PaginacaoRequest;
 use App\Interfaces\CRUD;
 use App\Models\Caminhao;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Mockery;
 use function PHPUnit\Framework\assertEquals;
 use PHPUnit\Framework\TestCase;
@@ -17,7 +17,7 @@ class CaminhaoTest extends TestCase
 {
     public function test_index(): void
     {
-        $request = new Request();
+        $request = new PaginacaoRequest();
         $resource = (object) [];
         $resultadoEsperado = new JsonResponse($resource);
         $servico = Mockery::mock(CRUD::class);

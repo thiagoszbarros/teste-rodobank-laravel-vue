@@ -5,10 +5,10 @@ namespace Tests\Unit;
 use App\Http\Controllers\ModeloController;
 use App\Http\Requests\AtualizarModeloRequest;
 use App\Http\Requests\CriarModeloRequest;
+use App\Http\Requests\PaginacaoRequest;
 use App\Interfaces\CRUD;
 use App\Models\Modelo;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Mockery;
 use function PHPUnit\Framework\assertEquals;
 use PHPUnit\Framework\TestCase;
@@ -17,7 +17,7 @@ class ModeloTest extends TestCase
 {
     public function test_index(): void
     {
-        $request = new Request();
+        $request = new PaginacaoRequest();
         $resource = (object) [];
         $resultadoEsperado = new JsonResponse($resource);
         $servico = Mockery::mock(CRUD::class);

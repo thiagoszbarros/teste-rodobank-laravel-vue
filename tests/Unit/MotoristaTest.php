@@ -5,13 +5,13 @@ namespace Tests\Unit;
 use App\Http\Controllers\MotoristaController;
 use App\Http\Requests\AtualizarMotoristaRequest;
 use App\Http\Requests\CriarMotoristaRequest;
+use App\Http\Requests\PaginacaoRequest;
 use App\Interfaces\CRUD;
 use App\Models\Motorista;
 use Avlima\PhpCpfCnpjGenerator\Generator;
 use DateInterval;
 use DateTime;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Mockery;
 use function PHPUnit\Framework\assertEquals;
 use PHPUnit\Framework\TestCase;
@@ -20,7 +20,7 @@ class MotoristaTest extends TestCase
 {
     public function test_index(): void
     {
-        $request = new Request();
+        $request = new PaginacaoRequest();
         $resource = (object) [];
         $resultadoEsperado = new JsonResponse($resource);
         $servico = Mockery::mock(CRUD::class);

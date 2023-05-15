@@ -4,9 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\AtualizarMotoristaRequest;
 use App\Http\Requests\CriarMotoristaRequest;
+use App\Http\Requests\PaginacaoRequest;
 use App\Interfaces\CRUD;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 
 class MotoristaController extends Controller
 {
@@ -15,7 +15,7 @@ class MotoristaController extends Controller
     ) {
     }
 
-    public function index(Request $request): JsonResponse
+    public function index(PaginacaoRequest $request): JsonResponse
     {
         try {
             return new JsonResponse(

@@ -4,9 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\AtualizarCaminhaoRequest;
 use App\Http\Requests\CriarCaminhaoRequest;
+use App\Http\Requests\PaginacaoRequest;
 use App\Interfaces\CRUD;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 
 class CaminhaoController extends Controller
 {
@@ -15,7 +15,7 @@ class CaminhaoController extends Controller
     ) {
     }
 
-    public function index(Request $request)
+    public function index(PaginacaoRequest $request)
     {
         try {
             return new JsonResponse(

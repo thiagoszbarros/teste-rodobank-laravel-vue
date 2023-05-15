@@ -4,9 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\AtualizarModeloRequest;
 use App\Http\Requests\CriarModeloRequest;
+use App\Http\Requests\PaginacaoRequest;
 use App\Interfaces\CRUD;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 
 class ModeloController extends Controller
 {
@@ -15,7 +15,7 @@ class ModeloController extends Controller
     ) {
     }
 
-    public function index(Request $request): JsonResponse
+    public function index(PaginacaoRequest $request): JsonResponse
     {
         try {
             return new JsonResponse(

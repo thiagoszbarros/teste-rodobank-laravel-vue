@@ -5,11 +5,11 @@ namespace Tests\Unit;
 use App\Http\Controllers\TransportadoraController;
 use App\Http\Requests\AtualizarTransportadoraRequest;
 use App\Http\Requests\CriarTransportadoraRequest;
+use App\Http\Requests\PaginacaoRequest;
 use App\Interfaces\CRUD;
 use App\Models\Transportadora;
 use Avlima\PhpCpfCnpjGenerator\Generator;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Mockery;
 use function PHPUnit\Framework\assertEquals;
@@ -19,7 +19,7 @@ class TransportadoraTest extends TestCase
 {
     public function test_index(): void
     {
-        $request = new Request();
+        $request = new PaginacaoRequest();
         $resource = (object) [];
         $resultadoEsperado = new JsonResponse($resource);
         $servico = Mockery::mock(CRUD::class);

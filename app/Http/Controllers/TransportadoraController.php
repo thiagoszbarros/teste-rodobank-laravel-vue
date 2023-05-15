@@ -4,9 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\AtualizarTransportadoraRequest;
 use App\Http\Requests\CriarTransportadoraRequest;
+use App\Http\Requests\PaginacaoRequest;
 use App\Interfaces\CRUD;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 class TransportadoraController extends Controller
@@ -16,7 +16,7 @@ class TransportadoraController extends Controller
     ) {
     }
 
-    public function index(Request $request): JsonResponse
+    public function index(PaginacaoRequest $request): JsonResponse
     {
         try {
             return new JsonResponse(
