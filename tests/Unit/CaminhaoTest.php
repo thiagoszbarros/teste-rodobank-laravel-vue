@@ -10,107 +10,93 @@ use App\Interfaces\CRUD;
 use App\Models\Caminhao;
 use Illuminate\Http\JsonResponse;
 use Mockery;
-use function PHPUnit\Framework\assertEquals;
-use PHPUnit\Framework\TestCase;
 
-class CaminhaoTest extends TestCase
-{
-    public function test_index(): void
-    {
-        $request = new PaginacaoRequest();
-        $resource = (object) [];
-        $resultadoEsperado = new JsonResponse($resource);
-        $servico = Mockery::mock(CRUD::class);
-        $servico->shouldReceive('obterTodos')->andReturn($resource);
+test('index', function () {
+    $request = new PaginacaoRequest();
+    $resource = (object) [];
+    $resultadoEsperado = new JsonResponse($resource);
+    $servico = Mockery::mock(CRUD::class);
+    $servico->shouldReceive('obterTodos')->andReturn($resource);
 
-        $resultado = (new CaminhaoController($servico))->index($request);
-        assertEquals($resultado, $resultadoEsperado);
-    }
+    $resultado = (new CaminhaoController($servico))->index($request);
 
-    public function test_show(): void
-    {
-        $id = '1';
-        $resource = new Caminhao();
-        $resultadoEsperado = new JsonResponse($resource);
-        $servico = Mockery::mock(CRUD::class);
-        $servico->shouldReceive('obterPor')->andReturn($resource);
+    expect($resultado)->toEqual($resultadoEsperado);
+});
 
-        $resultado = (new CaminhaoController($servico))->show($id);
+test('show', function () {
+    $id = '1';
+    $resource = new Caminhao();
+    $resultadoEsperado = new JsonResponse($resource);
+    $servico = Mockery::mock(CRUD::class);
+    $servico->shouldReceive('obterPor')->andReturn($resource);
 
-        assertEquals($resultado, $resultadoEsperado);
-    }
+    $resultado = (new CaminhaoController($servico))->show($id);
 
-    public function test_create(): void
-    {
+    expect($resultado)->toEqual($resultadoEsperado);
+});
 
-        $request = new CriarCaminhaoRequest([
+test('create', function () {
+    $resultadoEsperado = new JsonResponse(
+        'Caminhao criado com sucesso.',
+        JsonResponse::HTTP_CREATED
+    );
+
+    $servico = Mockery::mock(CRUD::class);
+    $servico->shouldReceive('criar');
+
+    $resultado = (new CaminhaoController($servico))->store(
+        new CriarCaminhaoRequest([
             'nome' => fake()->name(),
-        ]);
+        ])
+    );
 
-        $resultadoEsperado = new JsonResponse(
-            'Caminhao criado com sucesso.',
-            JsonResponse::HTTP_CREATED
-        );
+    expect($resultado)->toEqual($resultadoEsperado);
+});
 
-        $servico = Mockery::mock(CRUD::class);
-        $servico->shouldReceive('criar');
+test('update', function () {
+    $resultadoEsperado = new JsonResponse(
+        null,
+        JsonResponse::HTTP_NO_CONTENT
+    );
 
-        $resultado = (new CaminhaoController($servico))->store($request);
+    $servico = Mockery::mock(CRUD::class);
+    $servico->shouldReceive('atualizar');
 
-        assertEquals($resultado, $resultadoEsperado);
-    }
-
-    public function test_update(): void
-    {
-        $id = '1';
-        $request = new AtualizarCaminhaoRequest([
+    $resultado = (new CaminhaoController($servico))->update(
+        new AtualizarCaminhaoRequest([
             'nome' => fake()->name(),
-        ]);
+        ]),
+        '1'
+    );
 
-        $resultadoEsperado = new JsonResponse(
-            null,
-            JsonResponse::HTTP_NO_CONTENT
-        );
+    expect($resultado)->toEqual($resultadoEsperado);
+});
 
-        $servico = Mockery::mock(CRUD::class);
-        $servico->shouldReceive('atualizar');
+test('delete', function () {
 
-        $resultado = (new CaminhaoController($servico))->update($request, $id);
+    $resultadoEsperado = new JsonResponse(
+        null,
+        JsonResponse::HTTP_NO_CONTENT
+    );
 
-        assertEquals($resultado, $resultadoEsperado);
-    }
+    $servico = Mockery::mock(CRUD::class);
+    $servico->shouldReceive('deletar');
 
-    public function test_delete(): void
-    {
-        $id = '1';
+    $resultado = (new CaminhaoController($servico))->destroy('1');
 
-        $resultadoEsperado = new JsonResponse(
-            null,
-            JsonResponse::HTTP_NO_CONTENT
-        );
+    expect($resultado)->toEqual($resultadoEsperado);
+});
 
-        $servico = Mockery::mock(CRUD::class);
-        $servico->shouldReceive('deletar');
+test('delete em massa', function () {
+    $resultadoEsperado = new JsonResponse(
+        null,
+        JsonResponse::HTTP_NO_CONTENT
+    );
 
-        $resultado = (new CaminhaoController($servico))->destroy($id);
+    $servico = Mockery::mock(CRUD::class);
+    $servico->shouldReceive('deletar');
 
-        assertEquals($resultado, $resultadoEsperado);
-    }
+    $resultado = (new CaminhaoController($servico))->destroy('1,2,3,4');
 
-    public function test_delete_em_massa(): void
-    {
-        $id = '1,2,3,4';
-
-        $resultadoEsperado = new JsonResponse(
-            null,
-            JsonResponse::HTTP_NO_CONTENT
-        );
-
-        $servico = Mockery::mock(CRUD::class);
-        $servico->shouldReceive('deletar');
-
-        $resultado = (new CaminhaoController($servico))->destroy($id);
-
-        assertEquals($resultado, $resultadoEsperado);
-    }
-}
+    expect($resultado)->toEqual($resultadoEsperado);
+});

@@ -13,113 +13,92 @@ use DateInterval;
 use DateTime;
 use Illuminate\Http\JsonResponse;
 use Mockery;
-use function PHPUnit\Framework\assertEquals;
-use PHPUnit\Framework\TestCase;
 
-class MotoristaTest extends TestCase
-{
-    public function test_index(): void
-    {
-        $request = new PaginacaoRequest();
-        $resource = (object) [];
-        $resultadoEsperado = new JsonResponse($resource);
-        $servico = Mockery::mock(CRUD::class);
-        $servico->shouldReceive('obterTodos')->andReturn($resource);
+test('Index', function () {
+    $request = new PaginacaoRequest();
+    $resource = (object) [];
+    $resultadoEsperado = new JsonResponse($resource);
+    $servico = Mockery::mock(CRUD::class);
+    $servico->shouldReceive('obterTodos')->andReturn($resource);
 
-        $resultado = (new MotoristaController($servico))->index($request);
-        assertEquals($resultado, $resultadoEsperado);
-    }
+    $resultado = (new MotoristaController($servico))->index($request);
 
-    public function test_show(): void
-    {
-        $id = '1';
-        $resource = new Motorista();
-        $resultadoEsperado = new JsonResponse($resource);
-        $servico = Mockery::mock(CRUD::class);
-        $servico->shouldReceive('obterPor')->andReturn($resource);
+    expect($resultado)->toEqual($resultadoEsperado);
+});
 
-        $resultado = (new MotoristaController($servico))->show($id);
+test('Show', function () {
+    $resource = new Motorista();
+    $resultadoEsperado = new JsonResponse($resource);
+    $servico = Mockery::mock(CRUD::class);
+    $servico->shouldReceive('obterPor')->andReturn($resource);
 
-        assertEquals($resultado, $resultadoEsperado);
-    }
+    $resultado = (new MotoristaController($servico))->show('1');
 
-    public function test_create(): void
-    {
+    expect($resultado)->toEqual($resultadoEsperado);
+});
 
-        $request = new CriarMotoristaRequest([
-            'nome' => fake()->name(),
-            'cpf' => Generator::cpf(),
-            'data_nascimento' => (new DateTime())->sub(new DateInterval('P18Y'))->format('d-m-Y'),
-            'email' => fake()->email(),
-        ]);
+test('Create', function () {
+    $resultadoEsperado = new JsonResponse(
+        'Motorista criado com sucesso.',
+        JsonResponse::HTTP_CREATED
+    );
 
-        $resultadoEsperado = new JsonResponse(
-            'Motorista criado com sucesso.',
-            JsonResponse::HTTP_CREATED
-        );
+    $servico = Mockery::mock(CRUD::class);
+    $servico->shouldReceive('criar');
 
-        $servico = Mockery::mock(CRUD::class);
-        $servico->shouldReceive('criar');
+    $resultado = (new MotoristaController($servico))->store(new CriarMotoristaRequest([
+        'nome' => fake()->name(),
+        'cpf' => Generator::cpf(),
+        'data_nascimento' => (new DateTime())->sub(new DateInterval('P18Y'))->format('d-m-Y'),
+        'email' => fake()->email(),
+    ]));
 
-        $resultado = (new MotoristaController($servico))->store($request);
+    expect($resultado)->toEqual($resultadoEsperado);
+});
 
-        assertEquals($resultado, $resultadoEsperado);
-    }
+test('Update', function () {
+    $resultadoEsperado = new JsonResponse(
+        null,
+        JsonResponse::HTTP_NO_CONTENT
+    );
 
-    public function test_update(): void
-    {
-        $id = '1';
-        $request = new AtualizarMotoristaRequest([
-            'nome' => fake()->name(),
-            'cpf' => Generator::cpf(),
-            'data_nascimento' => (new DateTime())->sub(new DateInterval('P18Y'))->format('d-m-Y'),
-            'email' => fake()->email(),
-        ]);
+    $servico = Mockery::mock(CRUD::class);
+    $servico->shouldReceive('atualizar');
 
-        $resultadoEsperado = new JsonResponse(
-            null,
-            JsonResponse::HTTP_NO_CONTENT
-        );
+    $resultado = (new MotoristaController($servico))->update(new AtualizarMotoristaRequest([
+        'nome' => fake()->name(),
+        'cpf' => Generator::cpf(),
+        'data_nascimento' => (new DateTime())->sub(new DateInterval('P18Y'))->format('d-m-Y'),
+        'email' => fake()->email(),
+    ]), '1');
 
-        $servico = Mockery::mock(CRUD::class);
-        $servico->shouldReceive('atualizar');
+    expect($resultado)->toEqual($resultadoEsperado);
+});
 
-        $resultado = (new MotoristaController($servico))->update($request, $id);
+test('Delete', function () {
+    $resultadoEsperado = new JsonResponse(
+        null,
+        JsonResponse::HTTP_NO_CONTENT
+    );
 
-        assertEquals($resultado, $resultadoEsperado);
-    }
+    $servico = Mockery::mock(CRUD::class);
+    $servico->shouldReceive('deletar');
 
-    public function test_delete(): void
-    {
-        $id = '1';
+    $resultado = (new MotoristaController($servico))->destroy('1');
 
-        $resultadoEsperado = new JsonResponse(
-            null,
-            JsonResponse::HTTP_NO_CONTENT
-        );
+    expect($resultado)->toEqual($resultadoEsperado);
+});
 
-        $servico = Mockery::mock(CRUD::class);
-        $servico->shouldReceive('deletar');
+test('Delete em massa', function () {
+    $resultadoEsperado = new JsonResponse(
+        null,
+        JsonResponse::HTTP_NO_CONTENT
+    );
 
-        $resultado = (new MotoristaController($servico))->destroy($id);
+    $servico = Mockery::mock(CRUD::class);
+    $servico->shouldReceive('deletar');
 
-        assertEquals($resultado, $resultadoEsperado);
-    }
+    $resultado = (new MotoristaController($servico))->destroy('1,2,3,4');
 
-    public function test_delete_em_massa(): void
-    {
-        $id = '1,2,3,4';
-
-        $resultadoEsperado = new JsonResponse(
-            null,
-            JsonResponse::HTTP_NO_CONTENT
-        );
-
-        $servico = Mockery::mock(CRUD::class);
-        $servico->shouldReceive('deletar');
-
-        $resultado = (new MotoristaController($servico))->destroy($id);
-
-        assertEquals($resultado, $resultadoEsperado);
-    }
-}
+    expect($resultado)->toEqual($resultadoEsperado);
+});

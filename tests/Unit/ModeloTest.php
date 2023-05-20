@@ -10,106 +10,96 @@ use App\Interfaces\CRUD;
 use App\Models\Modelo;
 use Illuminate\Http\JsonResponse;
 use Mockery;
-use function PHPUnit\Framework\assertEquals;
-use PHPUnit\Framework\TestCase;
 
-class ModeloTest extends TestCase
-{
-    public function test_index(): void
-    {
-        $request = new PaginacaoRequest();
-        $resource = (object) [];
-        $resultadoEsperado = new JsonResponse($resource);
-        $servico = Mockery::mock(CRUD::class);
-        $servico->shouldReceive('obterTodos')->andReturn($resource);
+test('Index', function () {
+    $request = new PaginacaoRequest();
+    $resource = (object) [];
+    $resultadoEsperado = new JsonResponse($resource);
+    $servico = Mockery::mock(CRUD::class);
+    $servico->shouldReceive('obterTodos')->andReturn($resource);
 
-        $resultado = (new ModeloController($servico))->index($request);
-        assertEquals($resultado, $resultadoEsperado);
-    }
+    $resultado = (new ModeloController($servico))->index($request);
 
-    public function test_show(): void
-    {
-        $id = '1';
-        $resource = new Modelo();
-        $resultadoEsperado = new JsonResponse($resource);
-        $servico = Mockery::mock(CRUD::class);
-        $servico->shouldReceive('obterPor')->andReturn($resource);
+    expect($resultado)->toEqual($resultadoEsperado);
+});
 
-        $resultado = (new ModeloController($servico))->show($id);
+test('Show', function () {
+    $id = '1';
+    $resource = new Modelo();
+    $resultadoEsperado = new JsonResponse($resource);
+    $servico = Mockery::mock(CRUD::class);
+    $servico->shouldReceive('obterPor')->andReturn($resource);
 
-        assertEquals($resultado, $resultadoEsperado);
-    }
+    $resultado = (new ModeloController($servico))->show($id);
 
-    public function test_create(): void
-    {
+    expect($resultado)->toEqual($resultadoEsperado);
+});
 
-        $request = new CriarModeloRequest([
+test('Store', function () {
+
+    $resultadoEsperado = new JsonResponse(
+        'Modelo criado com sucesso.',
+        JsonResponse::HTTP_CREATED
+    );
+
+    $servico = Mockery::mock(CRUD::class);
+    $servico->shouldReceive('criar');
+
+    $resultado = (new ModeloController($servico))->store(new CriarModeloRequest([
+        'nome' => fake()->name(),
+    ]));
+
+    expect($resultado)->toEqual($resultadoEsperado);
+});
+
+test('Update', function () {
+
+    $resultadoEsperado = new JsonResponse(
+        null,
+        JsonResponse::HTTP_NO_CONTENT
+    );
+
+    $servico = Mockery::mock(CRUD::class);
+    $servico->shouldReceive('atualizar');
+
+    $resultado = (new ModeloController($servico))->update(
+        new AtualizarModeloRequest([
             'nome' => fake()->name(),
-        ]);
+        ]),
+        '1'
+    );
 
-        $resultadoEsperado = new JsonResponse('Modelo criado com sucesso.',
-            JsonResponse::HTTP_CREATED
-        );
+    expect($resultado)->toEqual($resultadoEsperado);
+});
 
-        $servico = Mockery::mock(CRUD::class);
-        $servico->shouldReceive('criar');
+test('Delete', function () {
+    $id = '1';
 
-        $resultado = (new ModeloController($servico))->store($request);
+    $resultadoEsperado = new JsonResponse(
+        null,
+        JsonResponse::HTTP_NO_CONTENT
+    );
 
-        assertEquals($resultado, $resultadoEsperado);
-    }
+    $servico = Mockery::mock(CRUD::class);
+    $servico->shouldReceive('deletar');
 
-    public function test_update(): void
-    {
-        $id = '1';
-        $request = new AtualizarModeloRequest([
-            'nome' => fake()->name(),
-        ]);
+    $resultado = (new ModeloController($servico))->destroy($id);
 
-        $resultadoEsperado = new JsonResponse(
-            null,
-            JsonResponse::HTTP_NO_CONTENT
-        );
+    expect($resultado)->toEqual($resultadoEsperado);
+});
 
-        $servico = Mockery::mock(CRUD::class);
-        $servico->shouldReceive('atualizar');
+test('Delete em massa', function () {
+    $id = '1,2,3,4';
 
-        $resultado = (new ModeloController($servico))->update($request, $id);
+    $resultadoEsperado = new JsonResponse(
+        null,
+        JsonResponse::HTTP_NO_CONTENT
+    );
 
-        assertEquals($resultado, $resultadoEsperado);
-    }
+    $servico = Mockery::mock(CRUD::class);
+    $servico->shouldReceive('deletar');
 
-    public function test_delete(): void
-    {
-        $id = '1';
+    $resultado = (new ModeloController($servico))->destroy($id);
 
-        $resultadoEsperado = new JsonResponse(
-            null,
-            JsonResponse::HTTP_NO_CONTENT
-        );
-
-        $servico = Mockery::mock(CRUD::class);
-        $servico->shouldReceive('deletar');
-
-        $resultado = (new ModeloController($servico))->destroy($id);
-
-        assertEquals($resultado, $resultadoEsperado);
-    }
-
-    public function test_delete_em_massa(): void
-    {
-        $id = '1,2,3,4';
-
-        $resultadoEsperado = new JsonResponse(
-            null,
-            JsonResponse::HTTP_NO_CONTENT
-        );
-
-        $servico = Mockery::mock(CRUD::class);
-        $servico->shouldReceive('deletar');
-
-        $resultado = (new ModeloController($servico))->destroy($id);
-
-        assertEquals($resultado, $resultadoEsperado);
-    }
-}
+    expect($resultado)->toEqual($resultadoEsperado);
+});

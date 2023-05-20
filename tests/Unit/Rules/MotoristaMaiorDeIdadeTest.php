@@ -7,38 +7,30 @@ use DateInterval;
 use DateTime;
 use Illuminate\Translation\ArrayLoader;
 use Illuminate\Translation\Translator;
-use Illuminate\Validation\Factory as ValidationFactory;
-use function PHPUnit\Framework\assertFalse;
-use function PHPUnit\Framework\assertTrue;
-use PHPUnit\Framework\TestCase;
+use Illuminate\Validation\Factory;
 
-class MotoristaMaiorDeIdadeTest extends TestCase
-{
-    public function test_retorna_true_data_nascimento_de_motorista_maior_de_idade_valida_for_passada(): void
-    {
-        $dataNascimento = (new DateTime())->sub(new DateInterval('P18Y'));
-        $dataNascimentoFormatada = $dataNascimento->format('d-m-Y');
-        $regra = ['motorista_maior_de_idade' => [new MotoristaMaiorDeIdade]];
-        $motorista_maior_de_idade = ['motorista_maior_de_idade' => $dataNascimentoFormatada];
-        $tradutor = new Translator(new ArrayLoader, 'pt-br');
-        $validador = (new ValidationFactory($tradutor))->make($motorista_maior_de_idade, $regra);
+it('deve retornar true data de nascimento de motorista maior de idade valida for passada', function () {
+    $dataNascimento = (new DateTime())->sub(new DateInterval('P18Y'));
+    $dataNascimentoFormatada = $dataNascimento->format('d-m-Y');
+    $regra = ['motorista_maior_de_idade' => [new MotoristaMaiorDeIdade]];
+    $motorista_maior_de_idade = ['motorista_maior_de_idade' => $dataNascimentoFormatada];
+    $tradutor = new Translator(new ArrayLoader, 'pt-br');
+    $validador = (new Factory($tradutor))->make($motorista_maior_de_idade, $regra);
 
-        $resultado = $validador->passes();
+    $resultado = $validador->passes();
 
-        assertTrue($resultado);
-    }
+    expect($resultado)->toBeTrue();
+});
 
-    public function test_retorna_false_quando_data_nascimento_de_motorista_maior_de_idade_invalida_for_passada(): void
-    {
-        $dataNascimento = (new DateTime())->sub(new DateInterval('P17Y'));
-        $dataNascimentoFormatada = $dataNascimento->format('d-m-Y');
-        $regra = ['motorista_maior_de_idade' => [new MotoristaMaiorDeIdade]];
-        $motorista_maior_de_idade = ['motorista_maior_de_idade' => $dataNascimentoFormatada];
-        $tradutor = new Translator(new ArrayLoader, 'pt-br');
-        $validador = (new ValidationFactory($tradutor))->make($motorista_maior_de_idade, $regra);
+it('deve retornar false quando data de nascimento de motorista maior de idade invalida for passada', function () {
+    $dataNascimento = (new DateTime())->sub(new DateInterval('P17Y'));
+    $dataNascimentoFormatada = $dataNascimento->format('d-m-Y');
+    $regra = ['motorista_maior_de_idade' => [new MotoristaMaiorDeIdade]];
+    $motorista_maior_de_idade = ['motorista_maior_de_idade' => $dataNascimentoFormatada];
+    $tradutor = new Translator(new ArrayLoader, 'pt-br');
+    $validador = (new Factory($tradutor))->make($motorista_maior_de_idade, $regra);
 
-        $resultado = $validador->passes();
+    $resultado = $validador->passes();
 
-        assertFalse($resultado);
-    }
-}
+    expect($resultado)->toBeFalse();
+});

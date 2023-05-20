@@ -12,109 +12,89 @@ use Avlima\PhpCpfCnpjGenerator\Generator;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 use Mockery;
-use function PHPUnit\Framework\assertEquals;
-use PHPUnit\Framework\TestCase;
 
-class TransportadoraTest extends TestCase
-{
-    public function test_index(): void
-    {
-        $request = new PaginacaoRequest();
-        $resource = (object) [];
-        $resultadoEsperado = new JsonResponse($resource);
-        $servico = Mockery::mock(CRUD::class);
-        $servico->shouldReceive('obterTodos')->andReturn($resource);
+test('Index', function () {
+    $request = new PaginacaoRequest();
+    $resource = (object) [];
+    $resultadoEsperado = new JsonResponse($resource);
+    $servico = Mockery::mock(CRUD::class);
+    $servico->shouldReceive('obterTodos')->andReturn($resource);
 
-        $resultado = (new TransportadoraController($servico))->index($request);
-        assertEquals($resultado, $resultadoEsperado);
-    }
+    $resultado = (new TransportadoraController($servico))->index($request);
 
-    public function test_show(): void
-    {
-        $id = '1';
-        $resource = new Transportadora();
-        $resultadoEsperado = new JsonResponse($resource);
-        $servico = Mockery::mock(CRUD::class);
-        $servico->shouldReceive('obterPor')->andReturn($resource);
+    expect($resultado)->toEqual($resultadoEsperado);
+});
 
-        $resultado = (new TransportadoraController($servico))->show($id);
+test('Show', function () {
+    $resource = new Transportadora();
+    $resultadoEsperado = new JsonResponse($resource);
+    $servico = Mockery::mock(CRUD::class);
+    $servico->shouldReceive('obterPor')->andReturn($resource);
 
-        assertEquals($resultado, $resultadoEsperado);
-    }
+    $resultado = (new TransportadoraController($servico))->show('1');
 
-    public function test_create(): void
-    {
+    expect($resultado)->toEqual($resultadoEsperado);
+});
 
-        $request = new CriarTransportadoraRequest([
-            'nome' => fake()->name(),
-            'cnpj' => Generator::cnpj(),
-        ]);
+test('Create', function () {
 
-        $resultadoEsperado = new JsonResponse(
-            'Transportadora criada com sucesso.',
-            Response::HTTP_CREATED
-        );
+    $resultadoEsperado = new JsonResponse(
+        'Transportadora criada com sucesso.',
+        Response::HTTP_CREATED
+    );
 
-        $servico = Mockery::mock(CRUD::class);
-        $servico->shouldReceive('criar');
+    $servico = Mockery::mock(CRUD::class);
+    $servico->shouldReceive('criar');
 
-        $resultado = (new TransportadoraController($servico))->store($request);
+    $resultado = (new TransportadoraController($servico))->store(new CriarTransportadoraRequest([
+        'nome' => fake()->name(),
+        'cnpj' => Generator::cnpj(),
+    ]));
 
-        assertEquals($resultado, $resultadoEsperado);
-    }
+    expect($resultado)->toEqual($resultadoEsperado);
+});
 
-    public function test_update(): void
-    {
-        $id = '1';
-        $request = new AtualizarTransportadoraRequest([
-            'nome' => fake()->name(),
-            'cnpj' => Generator::cnpj(),
-        ]);
+test('Update', function () {
+    $resultadoEsperado = new JsonResponse(
+        null,
+        Response::HTTP_NO_CONTENT
+    );
 
-        $resultadoEsperado = new JsonResponse(
-            null,
-            Response::HTTP_NO_CONTENT
-        );
+    $servico = Mockery::mock(CRUD::class);
+    $servico->shouldReceive('atualizar');
 
-        $servico = Mockery::mock(CRUD::class);
-        $servico->shouldReceive('atualizar');
+    $resultado = (new TransportadoraController($servico))->update(new AtualizarTransportadoraRequest([
+        'nome' => fake()->name(),
+        'cnpj' => Generator::cnpj(),
+    ]), '1');
 
-        $resultado = (new TransportadoraController($servico))->update($request, $id);
+    expect($resultado)->toEqual($resultadoEsperado);
+});
 
-        assertEquals($resultado, $resultadoEsperado);
-    }
+test('Delete', function () {
+    $resultadoEsperado = new JsonResponse(
+        null,
+        Response::HTTP_NO_CONTENT
+    );
 
-    public function test_delete(): void
-    {
-        $id = '1';
+    $servico = Mockery::mock(CRUD::class);
+    $servico->shouldReceive('deletar');
 
-        $resultadoEsperado = new JsonResponse(
-            null,
-            Response::HTTP_NO_CONTENT
-        );
+    $resultado = (new TransportadoraController($servico))->destroy('1');
 
-        $servico = Mockery::mock(CRUD::class);
-        $servico->shouldReceive('deletar');
+    expect($resultado)->toEqual($resultadoEsperado);
+});
 
-        $resultado = (new TransportadoraController($servico))->destroy($id);
+test('Delete em massa', function () {
+    $resultadoEsperado = new JsonResponse(
+        null,
+        Response::HTTP_NO_CONTENT
+    );
 
-        assertEquals($resultado, $resultadoEsperado);
-    }
+    $servico = Mockery::mock(CRUD::class);
+    $servico->shouldReceive('deletar');
 
-    public function test_delete_em_massa(): void
-    {
-        $id = '1,2,3,4';
+    $resultado = (new TransportadoraController($servico))->destroy('1,2,3,4');
 
-        $resultadoEsperado = new JsonResponse(
-            null,
-            Response::HTTP_NO_CONTENT
-        );
-
-        $servico = Mockery::mock(CRUD::class);
-        $servico->shouldReceive('deletar');
-
-        $resultado = (new TransportadoraController($servico))->destroy($id);
-
-        assertEquals($resultado, $resultadoEsperado);
-    }
-}
+    expect($resultado)->toEqual($resultadoEsperado);
+});

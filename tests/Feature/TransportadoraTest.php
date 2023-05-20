@@ -4,61 +4,48 @@ namespace Tests\Feature;
 
 use App\Models\Transportadora;
 use Avlima\PhpCpfCnpjGenerator\Generator;
-use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Http\Response;
-use Tests\TestCase;
 
-class TransportadoraTest extends TestCase
-{
-    use WithoutMiddleware;
+beforeEach(function () {
+    $this->url = 'api/transportadoras/';
+    $this->transportadoraId = Transportadora::factory()->create()->id;
+});
 
-    public function test_index()
-    {
-        Transportadora::factory()->count(1)->create();
+test('index', function () {
 
-        $resultado = $this->get('api/transportadoras');
+    $this->withoutMiddleware()
+        ->get($this->url)
+        ->assertStatus(Response::HTTP_OK);
+});
 
-        $resultado->assertStatus(Response::HTTP_OK);
-    }
+test('show', function () {
+    $this->withoutMiddleware()
+        ->get($this->url.$this->transportadoraId)
+        ->assertStatus(Response::HTTP_OK);
+});
 
-    public function test_show()
-    {
-        $transportadora = Transportadora::factory()->create();
-
-        $resultado = $this->get("api/transportadoras/{$transportadora->id}");
-
-        $resultado->assertStatus(Response::HTTP_OK);
-    }
-
-    public function test_store()
-    {
-        $resultado = $this->post('api/transportadoras', [
+test('store', function () {
+    $this->withoutMiddleware()
+        ->post($this->url, [
             'nome' => fake()->name(),
             'cnpj' => Generator::cnpj(),
-        ]);
+        ])->assertStatus(Response::HTTP_CREATED);
+});
 
-        $resultado->assertStatus(Response::HTTP_CREATED);
-    }
+test('update', function () {
+    $this->withoutMiddleware()
+        ->put(
+            $this->url.$this->transportadoraId,
+            [
+                'nome' => fake()->name(),
+                'cnpj' => Generator::cnpj(),
+            ]
+        )
+        ->assertStatus(Response::HTTP_NO_CONTENT);
+});
 
-    public function test_update()
-    {
-        $transportadora = Transportadora::factory()->create();
-        $request = [
-            'nome' => fake()->name(),
-            'cnpj' => Generator::cnpj(),
-        ];
-
-        $resultado = $this->put("api/transportadoras/{$transportadora->id}", $request);
-
-        $resultado->assertStatus(Response::HTTP_NO_CONTENT);
-    }
-
-    public function test_destroy()
-    {
-        $transportadora = Transportadora::factory()->create();
-
-        $resultado = $this->delete("api/transportadoras/{$transportadora->id}");
-
-        $resultado->assertStatus(Response::HTTP_NO_CONTENT);
-    }
-}
+test('destroy', function () {
+    $this->withoutMiddleware()
+        ->delete($this->url.$this->transportadoraId)
+        ->assertStatus(Response::HTTP_NO_CONTENT);
+});

@@ -1,60 +1,50 @@
 <?php
 
-namespace Tests\Feature;
-
 use App\Models\Modelo;
-use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Http\Response;
-use Tests\TestCase;
 
-class ModeloTest extends TestCase
-{
-    use WithoutMiddleware;
+beforeEach(function () {
+    $this->url = 'api/modelos/';
+    $this->modeloId = Modelo::factory()->create()->id;
+});
 
-    public function test_index()
-    {
-        Modelo::factory()->count(1)->create();
+test('index', function () {
+    $this->withoutMiddleware()
+        ->get($this->url)
+        ->assertStatus(Response::HTTP_OK);
+});
 
-        $resultado = $this->get('api/modelos');
+test('show', function () {
+    $this->withoutMiddleware()
+        ->get($this->url.$this->modeloId)
+        ->assertStatus(Response::HTTP_OK);
+});
 
-        $resultado->assertStatus(Response::HTTP_OK);
-    }
+test('store', function () {
+    $this->withoutMiddleware()
+        ->post(
+            $this->url,
+            [
+                'nome' => fake()->word(),
+            ]
+        )
+        ->assertStatus(Response::HTTP_CREATED);
+});
 
-    public function test_show()
-    {
-        $motorista = Modelo::factory()->create();
+test('update', function () {
 
-        $resultado = $this->get("api/modelos/{$motorista->id}");
+    $this->withoutMiddleware()
+        ->put(
+            $this->url.$this->modeloId,
+            [
+                'nome' => fake()->word(),
+            ]
+        )
+        ->assertStatus(Response::HTTP_NO_CONTENT);
+});
 
-        $resultado->assertStatus(Response::HTTP_OK);
-    }
-
-    public function test_store()
-    {
-        $resultado = $this->post('api/modelos', [
-            'nome' => fake()->word(),
-        ]);
-
-        $resultado->assertStatus(Response::HTTP_CREATED);
-    }
-
-    public function test_update()
-    {
-        $motorista = Modelo::factory()->create();
-
-        $resultado = $this->put("api/modelos/{$motorista->id}", [
-            'nome' => fake()->word(),
-        ]);
-
-        $resultado->assertStatus(Response::HTTP_NO_CONTENT);
-    }
-
-    public function test_destroy()
-    {
-        $motorista = Modelo::factory()->create();
-
-        $resultado = $this->delete("api/modelos/{$motorista->id}");
-
-        $resultado->assertStatus(Response::HTTP_NO_CONTENT);
-    }
-}
+test('destroy', function () {
+    $this->withoutMiddleware()
+        ->delete($this->url.$this->modeloId)
+        ->assertStatus(Response::HTTP_NO_CONTENT);
+});

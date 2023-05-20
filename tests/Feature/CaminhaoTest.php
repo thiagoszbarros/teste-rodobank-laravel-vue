@@ -1,71 +1,60 @@
 <?php
 
-namespace Tests\Feature;
-
 use App\Models\Caminhao;
 use App\Models\Modelo;
 use App\Models\Motorista;
 use App\Models\Transportadora;
 use Database\Factories\CaminhaoFactory;
-use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Http\Response;
-use Tests\TestCase;
 
-class CaminhaoTest extends TestCase
-{
-    use WithoutMiddleware;
+beforeEach(function () {
+    $this->url = 'api/caminhoes/';
+    $this->caminhaoId = Caminhao::factory()->create()->id;
+});
 
-    public function test_index()
-    {
-        Caminhao::factory()->count(1)->create();
+test('index', function () {
+    $this->withoutMiddleware()
+        ->get($this->url)
+        ->assertStatus(Response::HTTP_OK);
+});
 
-        $resultado = $this->get('api/caminhoes');
+test('show', function () {
+    $this->withoutMiddleware()
+        ->get($this->url.$this->caminhaoId)
+        ->assertStatus(Response::HTTP_OK);
+});
 
-        $resultado->assertStatus(Response::HTTP_OK);
-    }
-
-    public function test_show()
-    {
-        $caminhao = Caminhao::factory()->create();
-
-        $resultado = $this->get("api/caminhoes/{$caminhao->id}");
-
-        $resultado->assertStatus(Response::HTTP_OK);
-    }
-
-    public function test_store()
-    {
-        $resultado = $this->post('api/caminhoes', [
+test('store', function () {
+    $this->withoutMiddleware()->post(
+        $this->url,
+        [
             'placa' => CaminhaoFactory::placa(),
             'motorista_id' => Motorista::factory()->create()->id,
             'modelo_id' => Modelo::factory()->create()->id,
             'cor' => fake()->colorName(),
             'transportadora_id' => Transportadora::factory()->create()->id,
-        ]);
+        ]
+    )
+        ->assertStatus(Response::HTTP_CREATED);
+});
 
-        $resultado->assertStatus(Response::HTTP_CREATED);
-    }
+test('update', function () {
+    $this->withoutMiddleware()
+        ->put(
+            $this->url.$this->caminhaoId,
+            [
+                'placa' => CaminhaoFactory::placa(),
+                'motorista_id' => Motorista::factory()->create()->id,
+                'modelo_id' => Modelo::factory()->create()->id,
+                'cor' => fake()->colorName(),
+                'transportadora_id' => Transportadora::factory()->create()->id,
+            ]
+        )
+        ->assertStatus(Response::HTTP_NO_CONTENT);
+});
 
-    public function test_update()
-    {
-        $caminhao = Caminhao::factory()->create();
-        $resultado = $this->put("api/caminhoes/{$caminhao->id}", [
-            'placa' => CaminhaoFactory::placa(),
-            'motorista_id' => Motorista::factory()->create()->id,
-            'modelo_id' => Modelo::factory()->create()->id,
-            'cor' => fake()->colorName(),
-            'transportadora_id' => Transportadora::factory()->create()->id,
-        ]);
-
-        $resultado->assertStatus(Response::HTTP_NO_CONTENT);
-    }
-
-    public function test_destroy()
-    {
-        $caminhao = Caminhao::factory()->create();
-
-        $resultado = $this->delete("api/caminhoes/{$caminhao->id}");
-
-        $resultado->assertStatus(Response::HTTP_NO_CONTENT);
-    }
-}
+test('destroy', function () {
+    $this->withoutMiddleware()
+        ->delete($this->url.$this->caminhaoId)
+        ->assertStatus(Response::HTTP_NO_CONTENT);
+});
