@@ -21,7 +21,7 @@ test('Index', function () {
 
     $resultado = (new ModeloController($servico))->index($request);
 
-    expect($resultado)->toEqual($resultadoEsperado);
+    expect($resultado->original)->toEqual($resultadoEsperado->original);
 });
 
 test('Show', function () {
@@ -33,7 +33,7 @@ test('Show', function () {
 
     $resultado = (new ModeloController($servico))->show($id);
 
-    expect($resultado)->toEqual($resultadoEsperado);
+    expect($resultado->original)->toEqual($resultadoEsperado->original);
 });
 
 test('Store', function () {
@@ -50,7 +50,7 @@ test('Store', function () {
         'nome' => fake()->name(),
     ]));
 
-    expect($resultado)->toEqual($resultadoEsperado);
+    expect($resultado->original)->toEqual($resultadoEsperado->original);
 });
 
 test('Update', function () {
@@ -70,7 +70,7 @@ test('Update', function () {
         '1'
     );
 
-    expect($resultado)->toEqual($resultadoEsperado);
+    expect($resultado->original)->toEqual($resultadoEsperado->original);
 });
 
 test('Delete', function () {
@@ -86,7 +86,7 @@ test('Delete', function () {
 
     $resultado = (new ModeloController($servico))->destroy($id);
 
-    expect($resultado)->toEqual($resultadoEsperado);
+    expect($resultado->original)->toEqual($resultadoEsperado->original);
 });
 
 test('Delete em massa', function () {
@@ -102,7 +102,7 @@ test('Delete em massa', function () {
 
     $resultado = (new ModeloController($servico))->destroy($id);
 
-    expect($resultado)->toEqual($resultadoEsperado);
+    expect($resultado->original)->toEqual($resultadoEsperado->original);
 });
 
 test('Erro', function () {

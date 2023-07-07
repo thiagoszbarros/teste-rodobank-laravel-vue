@@ -24,7 +24,7 @@ test('Index', function () {
 
     $resultado = (new MotoristaController($servico))->index($request);
 
-    expect($resultado)->toEqual($resultadoEsperado);
+    expect($resultado->original)->toEqual($resultadoEsperado->original);
 });
 
 test('Show', function () {
@@ -35,7 +35,7 @@ test('Show', function () {
 
     $resultado = (new MotoristaController($servico))->show('1');
 
-    expect($resultado)->toEqual($resultadoEsperado);
+    expect($resultado->original)->toEqual($resultadoEsperado->original);
 });
 
 test('Create', function () {
@@ -54,7 +54,7 @@ test('Create', function () {
         'email' => fake()->email(),
     ]));
 
-    expect($resultado)->toEqual($resultadoEsperado);
+    expect($resultado->original)->toEqual($resultadoEsperado->original);
 });
 
 test('Update', function () {
@@ -73,7 +73,7 @@ test('Update', function () {
         'email' => fake()->email(),
     ]), '1');
 
-    expect($resultado)->toEqual($resultadoEsperado);
+    expect($resultado->original)->toEqual($resultadoEsperado->original);
 });
 
 test('Delete', function () {
@@ -87,7 +87,7 @@ test('Delete', function () {
 
     $resultado = (new MotoristaController($servico))->destroy('1');
 
-    expect($resultado)->toEqual($resultadoEsperado);
+    expect($resultado->original)->toEqual($resultadoEsperado->original);
 });
 
 test('Delete em massa', function () {
@@ -101,7 +101,7 @@ test('Delete em massa', function () {
 
     $resultado = (new MotoristaController($servico))->destroy('1,2,3,4');
 
-    expect($resultado)->toEqual($resultadoEsperado);
+    expect($resultado->original)->toEqual($resultadoEsperado->original);
 });
 
 test('Erro', function () {

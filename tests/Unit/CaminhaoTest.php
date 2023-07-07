@@ -21,7 +21,7 @@ test('index', function () {
 
     $resultado = (new CaminhaoController($servico))->index($request);
 
-    expect($resultado)->toEqual($resultadoEsperado);
+    expect($resultado->original)->toEqual($resultadoEsperado->original);
 });
 
 test('show', function () {
@@ -33,7 +33,7 @@ test('show', function () {
 
     $resultado = (new CaminhaoController($servico))->show($id);
 
-    expect($resultado)->toEqual($resultadoEsperado);
+    expect($resultado->original)->toEqual($resultadoEsperado->original);
 });
 
 test('create', function () {
@@ -51,7 +51,7 @@ test('create', function () {
         ])
     );
 
-    expect($resultado)->toEqual($resultadoEsperado);
+    expect($resultado->original)->toEqual($resultadoEsperado->original);
 });
 
 test('update', function () {
@@ -70,7 +70,7 @@ test('update', function () {
         '1'
     );
 
-    expect($resultado)->toEqual($resultadoEsperado);
+    expect($resultado->original)->toEqual($resultadoEsperado->original);
 });
 
 test('delete', function () {
@@ -85,7 +85,7 @@ test('delete', function () {
 
     $resultado = (new CaminhaoController($servico))->destroy('1');
 
-    expect($resultado)->toEqual($resultadoEsperado);
+    expect($resultado->original)->toEqual($resultadoEsperado->original);
 });
 
 test('delete em massa', function () {
@@ -99,7 +99,7 @@ test('delete em massa', function () {
 
     $resultado = (new CaminhaoController($servico))->destroy('1,2,3,4');
 
-    expect($resultado)->toEqual($resultadoEsperado);
+    expect($resultado->original)->toEqual($resultadoEsperado->original);
 });
 
 test('Erro', function () {
