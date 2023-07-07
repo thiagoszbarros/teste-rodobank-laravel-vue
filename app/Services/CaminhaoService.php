@@ -52,6 +52,6 @@ class CaminhaoService implements CRUD
 
     public function deletar(string $id): void
     {
-        $this->caminhao::whereIn('id', explode(',', $id))->delete();
+        $this->caminhao::destroy(explode(',', $id));
     }
 }

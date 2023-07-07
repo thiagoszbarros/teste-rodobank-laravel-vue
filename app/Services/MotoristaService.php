@@ -54,6 +54,6 @@ class MotoristaService implements CRUD
 
     public function deletar(string $id): void
     {
-        $this->motorista::whereIn('id', explode(',', $id))->delete();
+        $this->motorista::destroy(explode(',', $id));
     }
 }

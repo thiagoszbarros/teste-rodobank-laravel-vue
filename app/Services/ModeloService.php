@@ -44,6 +44,6 @@ class ModeloService implements CRUD
 
     public function deletar(string $id): void
     {
-        $this->modelo::whereIn('id', explode(',', $id))->delete();
+        $this->modelo::destroy(explode(',', $id));
     }
 }

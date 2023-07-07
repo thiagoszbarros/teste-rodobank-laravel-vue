@@ -50,6 +50,6 @@ class TransportadoraService implements CRUD
 
     public function deletar(string $id): void
     {
-        $this->transportadora::whereIn('id', explode(',', $id))->delete();
+        $this->transportadora::destroy(explode(',', $id));
     }
 }
