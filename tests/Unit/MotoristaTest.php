@@ -2,17 +2,18 @@
 
 namespace Tests\Unit;
 
-use App\Http\Controllers\MotoristaController;
-use App\Http\Requests\AtualizarMotoristaRequest;
-use App\Http\Requests\CriarMotoristaRequest;
-use App\Http\Requests\PaginacaoRequest;
+use Mockery;
+use DateTime;
+use Exception;
+use DateInterval;
 use App\Interfaces\CRUD;
 use App\Models\Motorista;
-use Avlima\PhpCpfCnpjGenerator\Generator;
-use DateInterval;
-use DateTime;
 use Illuminate\Http\JsonResponse;
-use Mockery;
+use App\Http\Requests\PaginacaoRequest;
+use Avlima\PhpCpfCnpjGenerator\Generator;
+use App\Http\Requests\CriarMotoristaRequest;
+use App\Http\Controllers\MotoristaController;
+use App\Http\Requests\AtualizarMotoristaRequest;
 
 test('Index', function () {
     $request = new PaginacaoRequest();
@@ -101,4 +102,27 @@ test('Delete em massa', function () {
     $resultado = (new MotoristaController($servico))->destroy('1,2,3,4');
 
     expect($resultado)->toEqual($resultadoEsperado);
+});
+
+test('Erro', function () {
+    $request = new PaginacaoRequest();
+    $ErroEsperado = new JsonResponse("Message", JsonResponse::HTTP_BAD_REQUEST);
+    $servico = Mockery::mock(CRUD::class);
+    $servico->shouldReceive('obterTodos')->andThrow(new Exception("Message"));
+    $servico->shouldReceive('obterPor')->andThrow(new Exception("Message"));
+    $servico->shouldReceive('criar')->andThrow(new Exception("Message"));
+    $servico->shouldReceive('atualizar')->andThrow(new Exception("Message"));
+    $servico->shouldReceive('deletar')->andThrow(new Exception("Message"));
+
+    $resultadoIndex = (new MotoristaController($servico))->index($request);
+    $resultadoShow = (new MotoristaController($servico))->show($request);
+    $resultadoCreate = (new MotoristaController($servico))->store(new CriarMotoristaRequest);
+    $resultadoUpdate = (new MotoristaController($servico))->update(new AtualizarMotoristaRequest, 1);
+    $resultadoDelete = (new MotoristaController($servico))->destroy(1);
+
+    expect($resultadoIndex)->toEqual($ErroEsperado);
+    expect($resultadoShow)->toEqual($ErroEsperado);
+    expect($resultadoCreate)->toEqual($ErroEsperado);
+    expect($resultadoUpdate)->toEqual($ErroEsperado);
+    expect($resultadoDelete)->toEqual($ErroEsperado);
 });

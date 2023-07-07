@@ -2,14 +2,15 @@
 
 namespace Tests\Unit;
 
+use Mockery;
+use Exception;
+use App\Models\Modelo;
+use App\Interfaces\CRUD;
+use Illuminate\Http\JsonResponse;
+use App\Http\Requests\PaginacaoRequest;
+use App\Http\Requests\CriarModeloRequest;
 use App\Http\Controllers\ModeloController;
 use App\Http\Requests\AtualizarModeloRequest;
-use App\Http\Requests\CriarModeloRequest;
-use App\Http\Requests\PaginacaoRequest;
-use App\Interfaces\CRUD;
-use App\Models\Modelo;
-use Illuminate\Http\JsonResponse;
-use Mockery;
 
 test('Index', function () {
     $request = new PaginacaoRequest();
@@ -102,4 +103,27 @@ test('Delete em massa', function () {
     $resultado = (new ModeloController($servico))->destroy($id);
 
     expect($resultado)->toEqual($resultadoEsperado);
+});
+
+test('Erro', function () {
+    $request = new PaginacaoRequest();
+    $ErroEsperado = new JsonResponse("Message", JsonResponse::HTTP_BAD_REQUEST);
+    $servico = Mockery::mock(CRUD::class);
+    $servico->shouldReceive('obterTodos')->andThrow(new Exception("Message"));
+    $servico->shouldReceive('obterPor')->andThrow(new Exception("Message"));
+    $servico->shouldReceive('criar')->andThrow(new Exception("Message"));
+    $servico->shouldReceive('atualizar')->andThrow(new Exception("Message"));
+    $servico->shouldReceive('deletar')->andThrow(new Exception("Message"));
+
+    $resultadoIndex = (new ModeloController($servico))->index($request);
+    $resultadoShow = (new ModeloController($servico))->show($request);
+    $resultadoCreate = (new ModeloController($servico))->store(new CriarModeloRequest);
+    $resultadoUpdate = (new ModeloController($servico))->update(new AtualizarModeloRequest, 1);
+    $resultadoDelete = (new ModeloController($servico))->destroy(1);
+
+    expect($resultadoIndex)->toEqual($ErroEsperado);
+    expect($resultadoShow)->toEqual($ErroEsperado);
+    expect($resultadoCreate)->toEqual($ErroEsperado);
+    expect($resultadoUpdate)->toEqual($ErroEsperado);
+    expect($resultadoDelete)->toEqual($ErroEsperado);
 });
