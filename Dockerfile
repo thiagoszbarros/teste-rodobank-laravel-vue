@@ -16,6 +16,8 @@ RUN apt-get update && apt-get install -y \
     pkg-config \
     libssl-dev \
     libpq-dev \
+    gcc \
+    make \
     && docker-php-ext-configure gd \
     && docker-php-ext-install -j$(nproc) gd \
     && docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql \
@@ -23,7 +25,6 @@ RUN apt-get update && apt-get install -y \
     && docker-php-ext-install zip \
     && docker-php-source delete \
     && docker-php-ext-install pcntl
-
 
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
@@ -33,9 +34,9 @@ RUN groupadd -g 1000 www
 
 RUN useradd -u 1000 -ms /bin/bash -g www www
 
-WORKDIR /var/www/rodobank-api
+WORKDIR /var/www/api
 
-COPY . /var/www/rodobank-api/
+COPY . /var/www/api/
 
 RUN composer install --ignore-platform-reqs
 
@@ -43,4 +44,5 @@ RUN composer dump-autoload
 
 RUN php artisan config:cache
 
-USER $user
+RUN pecl install xdebug \
+    && docker-php-ext-enable xdebug
