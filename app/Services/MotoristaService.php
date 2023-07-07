@@ -15,7 +15,7 @@ class MotoristaService implements CRUD
 
     public function obterTodos(int $offset = null): LengthAwarePaginator
     {
-        $offset = isset($offset) ? $offset : Motorista::count();
+        $offset = $offset ?: Motorista::count();
 
         return $this->motorista::with('caminhoes:id,motorista_id,placa')
             ->select('id', 'nome', 'cpf', 'email')

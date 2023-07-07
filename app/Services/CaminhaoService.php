@@ -15,7 +15,7 @@ class CaminhaoService implements CRUD
 
     public function obterTodos(int $offset = null): LengthAwarePaginator
     {
-        $offset = isset($offset) ? $offset : Caminhao::count();
+        $offset = $offset ?: Caminhao::count();
 
         return $this->caminhao::select('id', 'motorista_id', 'modelo_id', 'placa', 'cor')->paginate($offset);
     }

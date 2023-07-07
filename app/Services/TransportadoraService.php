@@ -15,7 +15,7 @@ class TransportadoraService implements CRUD
 
     public function obterTodos(int $offset = null): LengthAwarePaginator
     {
-        $offset = isset($offset) ? $offset : Transportadora::count();
+        $offset = $offset ?: Transportadora::count();
 
         return $this->transportadora::with('motoristas:id,transportadora_id,nome')
             ->select('id', 'nome', 'cnpj', 'status')

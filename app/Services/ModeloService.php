@@ -15,7 +15,7 @@ class ModeloService implements CRUD
 
     public function obterTodos(int $offset = null): LengthAwarePaginator
     {
-        $offset = isset($offset) ? $offset : Modelo::count();
+        $offset = $offset ?: Modelo::count();
 
         return $this->modelo::select('id', 'nome')->paginate($offset);
     }
